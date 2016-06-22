@@ -5,7 +5,7 @@
 
 class population {
 public:
-	void initialize();
+	void initialize(int individualSize);
 
 	string toString();
 

@@ -1,8 +1,9 @@
 #ifndef GENEVANN_INDIVIDUAL_H
 #define GENEVANN_INDIVIDUAL_H
 
-#include <vector>;
+#include <vector>
 #include <string>
+#include <math.h>
 
 using namespace std;
 
@@ -20,11 +21,12 @@ public:
 protected:
   vector<double> solution;
 
-	double  lowerBound = -1.0,
-					upperBound = 1.0,
-					evaluationValue;
+	double evaluationValue;
 
-	double getRandomDoubleWithinBounds();
+	// Used as argument in random number generation in exponential distribution.
+	double lambda = 3.5;
+
+	double getRandomValueFromDoubleExponentialDistribution();
 
 };
 

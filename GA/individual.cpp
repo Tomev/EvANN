@@ -1,15 +1,21 @@
 #include "individual.h"
+#include "time.h"
+
+#include <iostream>
 #include <cstdlib>
+#include <random>
+
 
 void individual::mutate()
 {
 
 }
 
-// Initializing solution vector with pseudo-random values.
+// Initializing solution vector with pseudo-random values with selected distribution.
 void individual::initialize(int n)
 {
-  for(int i = 0; i < n; ++i) solution.push_back(getRandomDoubleWithinBounds());
+  for(int i = 0; i < n; ++i)
+	  solution.push_back(getRandomValueFromDoubleExponentialDistribution());
 }
 
 individual individual::cross(const individual parent)
@@ -21,10 +27,16 @@ individual individual::cross(const individual parent)
   return child;
 }
 
-// Get random value within bounds defined in header.
-double individual::getRandomDoubleWithinBounds()
+// Returns e^(-|x|) for random x. This way distribution of weights in neural net
+// is meant to resemble one achieved by backpropagation (works by D. Montana).
+// Returns values from 0 to 1.
+double individual::getRandomValueFromDoubleExponentialDistribution()
 {
-  return (upperBound - lowerBound) * ( (double)rand() / (double)RAND_MAX ) + lowerBound;
+	std::default_random_engine generator;
+	generator.seed(time(NULL));
+	std::exponential_distribution<double> distribution(lambda);
+
+	return distribution(generator);
 }
 
 string individual::toString()
