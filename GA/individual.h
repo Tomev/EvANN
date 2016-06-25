@@ -5,6 +5,8 @@
 #include <string>
 #include <math.h>
 
+#include "exponentialDistribution.h"
+
 using namespace std;
 
 typedef vector<double> weights;
@@ -14,27 +16,29 @@ typedef vector<neurons> layers;
 class individual {
 
 public:
-  individual(vector<int> *topology);
+  individual(vector<int> *topology, i_distribution *distribution);
 
-  void initialize();
   void mutate();
+  individual cross(individual *parent);
 
-  individual cross(const individual parent);
-	string toString();
+  string toString();
 
 	void setEvaluationValue(double val);
 	double getEvaluationValue();
 
 protected:
   layers solution;
+
+private:
+  // TODO: Change to some kind of smart pointer.
   vector<int> *topology = NULL;
 
-	double evaluationValue;
+  double evaluationValue;
 
-	// Used as argument in random number generation in exponential distribution.
-	double lambda = 1;
+  // TODO: Change to some kind of smart pointer.
+  i_distribution *distribution = NULL;
 
-  // Biased and unbiased chromosome mutation probability. 0.1 is recommended.
+  // Biased and unbiased chromosome mutation probability. 10% is recommended.
   double chromosomeMutationProbabilityPercent = 10;
   // Number of nodes mutated during nodeMutation. Note that same node may be changed.
   // 2 is recommended.
@@ -44,9 +48,11 @@ protected:
   void biasedMutation();
   void nodeMutation();
 
-  double randomlyTurnNegative(double n);
-  bool mutationOccurred();
+  individual crossoverWeights(individual *parent);
+  individual crossoverNodes(individual *parent);
 
+
+  bool mutationOccurred();
 };
 
 #endif //GENEVANN_INDIVIDUAL_H
