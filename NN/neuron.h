@@ -12,5 +12,4 @@ private:
     vector<double> exitWeights;
 };
 
-
 #endif

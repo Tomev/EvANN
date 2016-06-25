@@ -5,14 +5,13 @@
 
 class population {
 public:
-	void initialize(int individualSize);
+	void initialize(int populationSize, vector<int> *topology);
 
 	string toString();
 
+	int mutationChancePercent = 5;
 protected:
-	int populationSize = 50;
 	vector<individual> individuals;
-
 
 };
 

@@ -7,11 +7,18 @@
 
 using namespace std;
 
+typedef vector<double> weights;
+typedef vector<weights> neurons;
+typedef vector<neurons> layers;
+
 class individual {
 
 public:
-	void mutate();
-  void initialize(int n);
+  individual(vector<int> *topology);
+
+  void initialize();
+  void mutate();
+
   individual cross(const individual parent);
 	string toString();
 
@@ -19,14 +26,26 @@ public:
 	double getEvaluationValue();
 
 protected:
-  vector<double> solution;
+  layers solution;
+  vector<int> *topology = NULL;
 
 	double evaluationValue;
 
 	// Used as argument in random number generation in exponential distribution.
-	double lambda = 3.5;
+	double lambda = 1;
 
-	double getRandomValueFromDoubleExponentialDistribution();
+  // Biased and unbiased chromosome mutation probability. 0.1 is recommended.
+  double chromosomeMutationProbabilityPercent = 10;
+  // Number of nodes mutated during nodeMutation. Note that same node may be changed.
+  // 2 is recommended.
+  int numberOfNodesToMutate = 2;
+
+  void unbiasedMutation();
+  void biasedMutation();
+  void nodeMutation();
+
+  double randomlyTurnNegative(double n);
+  bool mutationOccurred();
 
 };
 
