@@ -192,14 +192,14 @@ individual individual::crossoverNodes(individual *parent)
   return child;
 }
 
-void individual::setEvaluationValue(const double val)
+void individual::setFitnessValue(const double val)
 {
-	evaluationValue = val;
+  fitnessValue = val;
 }
 
-double individual::getEvaluationValue()
+double individual::getFitnessValue()
 {
-  return evaluationValue;
+  return fitnessValue;
 }
 
 // For debug purposes.

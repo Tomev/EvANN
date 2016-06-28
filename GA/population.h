@@ -5,13 +5,19 @@
 
 class population {
 public:
-	void initialize(int populationSize, vector<int> *topology);
+
+	void normalizeFitnesses();
 
 	string toString();
 
 	int mutationChancePercent = 5;
 protected:
+
+
+private:
 	vector<individual> individuals;
+	double findHighestFitnessValue();
+	double normalizeValue(double target, double highestValue);
 
 };
 

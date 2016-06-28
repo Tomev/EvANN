@@ -4,6 +4,7 @@
 #include "time.h"
 #include "GA/exponentialDistribution.h"
 
+
 using namespace std;
 
 exponentialDistribution distribution;
@@ -20,12 +21,6 @@ int main()
   srand(time(NULL));
 
 
-  individual i1(&topology, &distribution);
-  individual i2(&topology, &distribution);
-
-  cout << "i1 " << i1.toString() << endl;
-  cout << "i2 " << i2.toString() << endl;
-  cout << "c " << i1.cross(&i2).toString() << endl;
 
 
 	//cin >> PAUSE;

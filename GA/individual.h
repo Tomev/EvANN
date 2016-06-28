@@ -23,8 +23,8 @@ public:
 
   string toString();
 
-	void setEvaluationValue(double val);
-	double getEvaluationValue();
+	void setFitnessValue(double val);
+	double getFitnessValue();
 
 protected:
   layers solution;
@@ -33,7 +33,7 @@ private:
   // TODO: Change to some kind of smart pointer.
   vector<int> *topology = NULL;
 
-  double evaluationValue;
+  double fitnessValue;
 
   // TODO: Change to some kind of smart pointer.
   i_distribution *distribution = NULL;
