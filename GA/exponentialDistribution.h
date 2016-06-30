@@ -21,8 +21,6 @@ private:
   // to resemble one achieved by backpropagation (works by D. Montana).
   std::default_random_engine generator;
   std::exponential_distribution<double> distribution;
-
-  double randomlyTurnNegative(double n);
 };
 
 

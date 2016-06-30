@@ -1,5 +1,13 @@
 #include "population.h"
 
+double normalizeValue(double target, double highestValue);
+
+// Adds new individual of given topology to population
+void population::addIndividual(vector<int> *topology, i_distribution *distribution)
+{
+	individuals.push_back(individual(topology, distribution));
+}
+
 // Normalize fitness values of whole population to [0,1], where 1 is the most
 // desirable fitness.
 void population::normalizeFitnesses()
@@ -29,11 +37,6 @@ double population::findHighestFitnessValue()
 	return highestFitnessValue;
 }
 
-double population::normalizeValue(double target, double highestValue)
-{
-	return 1 - (target / highestValue);
-}
-
 // For debug purposes.
 string population::toString()
 {
@@ -46,4 +49,9 @@ string population::toString()
 	}
 
 	return result;
+}
+
+double normalizeValue(double target, double highestValue)
+{
+	return 1 - (target / highestValue);
 }

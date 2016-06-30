@@ -1,4 +1,5 @@
 #include "neuralNet.h"
+#include "cassert"
 
 // Creates neural net from given topology. Neurons connections are set, but all connections weights
 // are null.
@@ -35,15 +36,24 @@ void neuralNet::setNeuronConnections()
       {
         // Add to neuron at n output targeting nn
         neuron *target = &net.at(l+1).at(nn);
-        net.at(l).at(n).outputs.push_back(neuron::neuronOutput(target));
+        net.at(l).at(n).outputs.push_back(neuronOutput(target));
       }
     }
   }
 }
 
+// Set inputs given by vector of values.
+void neuralNet::setInputsValue(const vector<double> *inputs)
+{
+  assert(inputs->size() == net.at(0).size());
+
+  for(int i = 0; i < inputs->size(); ++i)
+    net.at(0).at(i).input = inputs->at(i);
+}
+
 void neuralNet::feedForward()
 {
-
+  //
 }
 
 // Fills result container with neuron values from output layer.
@@ -58,6 +68,6 @@ void neuralNet::getResults(vector<double> *results)
   for(int n = 0; n < net.at(outLayerIdx).size(); ++n)
   {
     // Add output value to container.
-    results->push_back(net.at(outLayerIdx).at(n).input);
+    results->push_back(net.at(outLayerIdx).at(n).baseOutput);
   }
 }

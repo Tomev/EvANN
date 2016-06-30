@@ -7,11 +7,14 @@ class neuralNet {
 public:
   neuralNet(const vector<int> topology);
 
-  void feedForward();
 
+
+	void setInputsValue(const vector<double> *inputs);
+
+	void feedForward();
   void getResults(vector<double> *results);
 
-  void setInputsValue(const vector<double> *inputs);
+
 
 protected:
 

@@ -2,8 +2,6 @@
 
 #include "GA/population.h"
 #include "time.h"
-#include "GA/exponentialDistribution.h"
-
 
 using namespace std;
 
@@ -27,7 +25,11 @@ int main()
   return EXIT_SUCCESS;
 }
 
-void initializePopulation(population)
+void initializePopulation(population *p)
 {
-
+  // For each potential individual.
+  for(int i = 0; i < populationSize; ++i)
+  {
+    p->addIndividual(&topology, &distribution);
+  }
 }

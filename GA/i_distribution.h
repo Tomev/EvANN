@@ -7,6 +7,8 @@ class i_distribution {
 
 public:
   virtual double getRandomNumberFromDistribution() = 0;
+
+	// TODO: Add virtual destructor.
 };
 
 

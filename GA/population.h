@@ -5,20 +5,20 @@
 
 class population {
 public:
+	int mutationChancePercent = 5;
+	int crossChancePercent = 5;
+
+	void addIndividual(vector<int> *topology, i_distribution *distribution);
 
 	void normalizeFitnesses();
 
 	string toString();
-
-	int mutationChancePercent = 5;
 protected:
 
 
 private:
 	vector<individual> individuals;
 	double findHighestFitnessValue();
-	double normalizeValue(double target, double highestValue);
-
 };
 
 #endif //GENEVANN_POPULATION_H

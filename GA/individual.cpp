@@ -117,7 +117,7 @@ void individual::nodeMutation()
   }
 }
 
-// Select crossing metohd(s) here.
+// Select crossing method(s) here.
 // Note that there are small differences between the two.
 // Check D. Montana's work for more info.
 individual individual::cross(individual *parent)
