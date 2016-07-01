@@ -9,11 +9,10 @@
 
 using namespace std;
 
-typedef vector<double> weights;
-typedef vector<weights> neurons;
-typedef vector<neurons> layers;
-
 class individual {
+
+	typedef vector<double> neuron;
+	typedef vector<neuron> layer;
 
 public:
   individual(vector<int> *topology, i_distribution *distribution);
@@ -26,8 +25,7 @@ public:
 	void setFitnessValue(double val);
 	double getFitnessValue();
 
-protected:
-  layers solution;
+	vector<layer> solution;
 
 private:
   // TODO: Change to some kind of smart pointer.

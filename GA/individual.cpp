@@ -26,23 +26,30 @@ individual::individual(vector<int> *topology, i_distribution *distribution)
   // on this layer. Solution can be constructed thanks to that information.
   // Note, that same topology is used to construct neural net. Solution doesn't have
   // output layer, hence -1 in first for.
-  for(unsigned int i = 0; i < topology->size()-1; ++i)
+
+  // For each potential layer
+  for(unsigned int l = 0; l < topology->size()-1; ++l)
   {
-    solution.push_back(neurons());
+    // Add new layer to solution
+    solution.push_back(layer());
 
-    for(unsigned int j = 0; j < topology->at(i); ++j)
+    // For each potential neuron
+    for(unsigned int n = 0; n < topology->at(l); ++n)
     {
-      solution.at(i).push_back(weights());
+      // Add new neuron (which is vector of weights) to solution
+      solution.at(l).push_back(neuron());
 
-      for(unsigned int k = 0; k < topology->at(i+1); ++k)
-        solution.at(i).at(j).push_back(distribution->getRandomNumberFromDistribution());
+      // For each potential weight
+      for(unsigned int w = 0; w < topology->at(l+1); ++w)
+      {
+        // Add new weight selected from given distribution to the vector
+        solution.at(l).at(n).push_back(distribution->getRandomNumberFromDistribution());
+      }
     }
-
   }
 }
 
-// Select mutation method(s) here.
-// nodeMutation is preferred as it's the most effective one.
+// Select mutation method(s) here. nodeMutation is preferred as it's the most effective one.
 void individual::mutate()
 {
   nodeMutation();

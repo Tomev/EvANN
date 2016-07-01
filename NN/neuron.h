@@ -28,14 +28,15 @@ public:
   double input;
   double baseOutput;
 
-  void setOutputsWeights();
-  void resetBaseOutput();
+  void setOutputsWeights(const vector<double> *weights);
+  void resetInputValue();
 
   void fire();
 
-  vector<neuronOutput> outputs;
+
 private:
 	i_activationFunction *activationFunction;
+	vector<neuronOutput> outputs;
 
 };
 
