@@ -2,6 +2,8 @@
 #define GENEVANN_NEURON_H
 
 #include <vector>
+#include <string>
+
 #include "sigmoidFunction.h" // An alternative could be tanh.
 
 using namespace std;
@@ -28,11 +30,14 @@ public:
   double input;
   double baseOutput;
 
+  void createNewConnection(neuron *target);
+  int getConnectionsNumber();
   void setOutputsWeights(const vector<double> *weights);
   void resetInputValue();
 
   void fire();
 
+  string toString();
 
 private:
 	i_activationFunction *activationFunction;

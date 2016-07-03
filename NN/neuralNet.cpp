@@ -4,16 +4,16 @@
 
 // Creates neural net from given topology. Neurons connections are set, but all connections weights
 // are null.
-neuralNet::neuralNet(const vector<int> topology)
+neuralNet::neuralNet(const vector<int> *topology)
 {
   // For each layer in topology
-  for(int l = 0; l < topology.size(); ++l)
+  for(int l = 0; l < topology->size(); ++l)
   {
     // Add layer
     net.push_back(layer());
 
     // For each neuron at current layer
-    for(int n = 0; n < topology.at(l); ++n)
+    for(int n = 0; n < topology->at(l); ++n)
     {
       net.at(l).push_back(neuron());
     }
@@ -33,11 +33,11 @@ void neuralNet::setNeuronConnections()
     for(int n = 0; n < net.at(l).size(); ++n)
     {
       //For each neuron of next layer
-      for(int nn = 0; n < net.at(l+1).size(); ++nn)
+      for(int nn = 0; nn < net.at(l+1).size(); ++nn)
       {
         // Add to neuron at n output targeting nn
         neuron *target = &net.at(l+1).at(nn);
-        net.at(l).at(n).outputs.push_back(neuronOutput(target));
+        net.at(l).at(n).createNewConnection(target);
       }
     }
   }
@@ -117,9 +117,30 @@ void neuralNet::setWeightsFromGASolution(const individual *i)
     // For each neuron in that layer
     for(int n = 0; n < net.at(l).size(); ++n)
     {
-      assert(i->solution.at(l).at(n).size() == net.at(l).at(n).size());
+      assert(i->solution.at(l).at(n).size() == net.at(l).at(n).getConnectionsNumber());
 
-      net.at(l).at(n).setOutputsWeights(i->solution.at(l).at(n));
+      net.at(l).at(n).setOutputsWeights(&(i->solution.at(l).at(n)));
     }
   }
+}
+
+// For debug purposes
+string neuralNet::toString()
+{
+  string result = "";
+  // For each layer.
+  for(int l = 0; l < net.size(); ++l)
+  {
+    // Add layer information to the result;
+    result += "Layer " + to_string(l) + ":\n";
+
+    // For each neuron on that layer
+    for(int n = 0; n < net.at(l).size(); ++n)
+    {
+      // Add neuron information to the result.
+      result += net.at(l).at(n).toString();
+    }
+  }
+
+  return result;
 }
