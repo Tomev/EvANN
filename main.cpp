@@ -5,16 +5,27 @@
 
 #include "time.h"
 
+struct testCase
+{
+  vector<double> input;
+  vector<double> output;
+};
+
 using namespace std;
 
+static void fillTestCases();
 static void initializePopulation(population *p);
 static void printOutputs(vector<double> *outputs);
+static double countTotalError();
 
 static exponentialDistribution distribution;
 
 static vector<int> topology = {3, 3, 2};
 static vector<double> input = {3.14, 12.0, 7.0};
 static vector<double> output;
+static vector<testCase> cases;
+
+static neuralNet nn(&topology);
 
 static int populationSize = 30;
 
@@ -26,8 +37,10 @@ int main()
   // Set random seed for proper functioning of GA.
   srand(time(NULL));
 
+  // Fill test cases container
+  fillTestCases();
+
   individual i(&topology, &distribution);
-  neuralNet nn(&topology);
 
   cout << i.toString();
 
@@ -64,4 +77,28 @@ static void printOutputs(vector<double> *outputs)
   }
 }
 
+// Counts total error between test cases outputs and neural net outputs, for weights given
+// by the individual and sets this error as evaluation value of individual.
+static void rateIndividual(individual *i)
+{
+  // Set weights according to given individual.
+  nn.setWeightsFromGASolution(i);
 
+  // Count total error.
+  double totalError = countTotalError();
+
+  // Set total error as individuals fitness value
+  i->setFitnessValue(totalError);
+}
+
+static double countTotalError()
+{
+  vector<testCase> cases;
+
+
+}
+
+static void getTestCases(vector<testCase> *cases)
+{
+
+}

@@ -4,7 +4,9 @@
 #include <vector>
 #include <string>
 
-#include "sigmoidFunction.h" // An alternative could be tanh.
+// TODO: Reconsider using linear function for continuous output.
+#include "Activation Functions/sigmoidFunction.h"
+#include "Activation Functions/linearFunction.h"
 
 using namespace std;
 
