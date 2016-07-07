@@ -15,6 +15,7 @@ class individual {
 	typedef vector<neuron> layer;
 
 public:
+	individual();
   individual(vector<int> *topology, i_distribution *distribution);
 
   void mutate();

@@ -7,6 +7,10 @@ void population::addIndividual(vector<int> *topology, i_distribution *distributi
 {
 	individuals.push_back(individual(topology, distribution));
 }
+void population::addIndividual(individual i)
+{
+	individuals.push_back(i);
+}
 
 // Normalize fitness values of whole population to [0,1], where 1 is the most
 // desirable fitness.

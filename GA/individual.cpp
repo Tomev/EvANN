@@ -4,6 +4,8 @@
 #include <iostream>
 #include <random>
 
+individual::individual() {};
+
 // Initializing solution vectors with pseudo-random values with selected i_distribution.
 // Note that solution is one layer smaller than neural net (solution doesn't have output
 // layer, as it doesn't have weights."

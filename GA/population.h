@@ -8,7 +8,10 @@ public:
 	int mutationChancePercent = 5;
 	int crossChancePercent = 5;
 
+	vector<individual> individuals;
+
 	void addIndividual(vector<int> *topology, i_distribution *distribution);
+	void addIndividual(individual i);
 
 	void normalizeFitnesses();
 
@@ -17,7 +20,6 @@ protected:
 
 
 private:
-	vector<individual> individuals;
 	double findHighestFitnessValue();
 };
 
