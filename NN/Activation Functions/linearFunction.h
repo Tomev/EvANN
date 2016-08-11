@@ -11,8 +11,8 @@ public:
 		return slope * val + yIntercept;
 	}
 private:
-	static double slope = 1.0; // a coefficient
-	static double yIntercept = 0.0; // b coefficient
+	double slope = 1.0; // a coefficient
+	double yIntercept = 0.0; // b coefficient
 };
 
 #endif //GENEVANN_LINEARFUNCTION_H

@@ -4,9 +4,11 @@
 #include "neuron.h"
 #include "../GA/individual.h"
 
+// TODO: constant corectness
+
 class neuralNet {
 public:
-  neuralNet(const vector<int> *topology);
+  neuralNet(const vector<unsigned int> *topology);
 
 	void setInputsValue(const vector<double> *inputs);
 	void setWeightsFromGASolution(const individual *i);

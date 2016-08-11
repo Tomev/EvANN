@@ -1,5 +1,5 @@
 #include "individual.h"
-#include "exponentialDistribution.h"
+#include "../Distributions/exponentialDistribution.h"
 
 #include <iostream>
 #include <random>

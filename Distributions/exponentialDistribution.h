@@ -7,7 +7,8 @@
 #include <random>
 
 // Class for generating pseudo-random numbers according to exponential distribution.
-class exponentialDistribution : public i_distribution{
+class exponentialDistribution : public i_distribution
+{
 
 public:
   exponentialDistribution();

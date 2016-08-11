@@ -5,7 +5,7 @@
 #include <string>
 #include <math.h>
 
-#include "exponentialDistribution.h"
+#include "../Distributions/exponentialDistribution.h"
 
 using namespace std;
 
