@@ -5,7 +5,7 @@
 
 #include "Strategies/i_fireflyStrategy.h"
 
-// TODO: constant corectness
+// TODO: constant correctness
 // TODO: move declarations to other file
 
 template <typename solutionClass> class firefly

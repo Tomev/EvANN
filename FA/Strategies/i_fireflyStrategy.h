@@ -14,7 +14,7 @@ public:
 	virtual void flyTowards(void* otherFireflyPosition) = 0;
 	virtual std::string toString() = 0;
 	//virtual ~i_fireflyStrategy() = 0; TODO
-	// TODO: constant corectness
+	// TODO: constant correctness
 
 protected:
 

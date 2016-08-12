@@ -4,7 +4,7 @@
 #include "neuron.h"
 #include "../GA/individual.h"
 
-// TODO: constant corectness
+// TODO: constant correctness
 
 class neuralNet {
 public:

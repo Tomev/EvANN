@@ -24,7 +24,7 @@ public:
 	string toString();
 
 	// ~neuralFireflyStrategy(); TODO
-	// TODO: constant corectness
+	// TODO: constant correctness
 
 protected:
 

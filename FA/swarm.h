@@ -4,22 +4,31 @@
 #include <vector>
 #include "firefly.h"
 
-// TODO: constant corectness
+// TODO: constant correctness
 // TODO: move declarations to other file
 
-template <class soultionClass> class swarm
+template <typename soultionClass> class swarm
 {
+
 public:
-	void initialize();
+	swarm(double* stepSize, double* baseAttraction, double* absorption,
+				unsigned int size, i_distribution, void* specificArgs, ...)
+	{
+
+	}
+
+	void initialize(unsigned int size)
+	{
+		// For each supposed firefly in swarm
+		for(unsigned f = 0; f < size; ++f)
+		{
+
+		}
+	};
 
 private:
-	int size;
+
 	std::vector<firefly<soultionClass>> population;
-
-	/* Used to scale random movement */
-	double stepSize = 0.1;
-	i_fireflyStrategy* strategy;
-
 };
 
 
