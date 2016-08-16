@@ -9,7 +9,7 @@ class i_fireflyStrategy
 {
 public:
 
-	virtual void setSolution(void* solution) = 0;
+	virtual void* getSolution() = 0;
 	virtual void initialize() = 0;
 	virtual void flyTowards(void* otherFireflyPosition) = 0;
 	virtual std::string toString() = 0;
@@ -30,6 +30,8 @@ protected:
 	double* baseAttraction = 0;
 	double* stepSize = 0;
 	double* absorption = 0;
+
+
 };
 
 #endif //GENEVANN_I_FIREFLYSTRATEGY_H

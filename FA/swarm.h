@@ -7,12 +7,12 @@
 // TODO: constant correctness
 // TODO: move declarations to other file
 
-template <typename soultionClass> class swarm
+class swarm
 {
 
 public:
 	swarm(double* stepSize, double* baseAttraction, double* absorption,
-				unsigned int size, i_distribution, void* specificArgs, ...)
+				unsigned int size, i_distribution* distribution, void* specificArgs)
 	{
 
 	}
@@ -28,7 +28,7 @@ public:
 
 private:
 
-	std::vector<firefly<soultionClass>> population;
+	std::vector<firefly> population;
 };
 
 

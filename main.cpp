@@ -48,8 +48,8 @@ int main()
 
 	double stepSize = 0.1, baseAttraction = 0.5, absorption = 5.0;
 
-	firefly<vector<l>> f1(new neuralFireflyStrategy(&stepSize, &baseAttraction, &absorption, &distribution, &topology));
-	firefly<vector<l>> f2(new neuralFireflyStrategy(&stepSize, &baseAttraction, &absorption, &distribution, &topology));
+	firefly f1(new neuralFireflyStrategy(&stepSize, &baseAttraction, &absorption, &distribution, &topology));
+	firefly f2(new neuralFireflyStrategy(&stepSize, &baseAttraction, &absorption, &distribution, &topology));
 	f1.initialize();
 	f2.initialize();
 

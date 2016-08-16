@@ -16,9 +16,11 @@ neuralFireflyStrategy::neuralFireflyStrategy
 	this->absorption = absorption;
 	this->distribution = distribution;
 	this->structure = top;
+
+	this->solution = new vector<layer>();
 }
 
-/* TODO
+/* TODO: Find out the problem
 neuralFireflyStrategy::~neuralFireflyStrategy()
 {
 	delete solution;
@@ -30,10 +32,9 @@ neuralFireflyStrategy::~neuralFireflyStrategy()
 }
 */
 
-void neuralFireflyStrategy::setSolution(void* solution)
+void* neuralFireflyStrategy::getSolution()
 {
-	if(hasProperType(solution)) this->solution = static_cast<vector<layer>*>(solution);
-	else return;
+	return solution;
 }
 
 /* Initialize solution with random values from given distribution and structure. */
