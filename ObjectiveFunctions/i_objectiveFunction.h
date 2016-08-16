@@ -4,7 +4,7 @@
 class i_objectiveFunction
 {
 public:
-	virtual double evaluate() = 0;
+	virtual double evaluate(void* solution) = 0;
 private:
 
 };

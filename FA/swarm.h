@@ -1,34 +1,30 @@
 #ifndef GENEVANN_SWARM_H
 #define GENEVANN_SWARM_H
 
-#include <vector>
-#include "firefly.h"
+#include "../NN/neuralNet.h"
+#include "fireflyFactory.h"
+#include "../ObjectiveFunctions/objectiveFunctions.h"
 
 // TODO: constant correctness
-// TODO: move declarations to other file
 
 class swarm
 {
 
 public:
 	swarm(double* stepSize, double* baseAttraction, double* absorption,
-				unsigned int size, i_distribution* distribution, void* specificArgs)
-	{
+				unsigned int size, i_distribution* distribution, neuralFireflyStrategy::topology* fireflyStructure,
+				neuralNet* nn);
 
-	}
-
-	void initialize(unsigned int size)
-	{
-		// For each supposed firefly in swarm
-		for(unsigned f = 0; f < size; ++f)
-		{
-
-		}
-	};
+	void findSolution();
 
 private:
 
-	std::vector<firefly> population;
+	unsigned int iterations = 50000;
+
+	vector<firefly> fireflies;
+	firefly* bestFirefly;
+	i_objectiveFunction* objectiveFunction = NULL;
+
 };
 
 

@@ -49,7 +49,6 @@ void neuralNet::setInputsValue(const vector<double> *inputs)
   assert(inputs != NULL);
   assert(inputs->size() == net.at(0).size());
 
-
   for(int i = 0; i < inputs->size(); ++i)
     net.at(0).at(i).input = inputs->at(i);
 }
@@ -105,21 +104,21 @@ void neuralNet::getResults(vector<double> *results)
   }
 }
 
-void neuralNet::setWeightsFromGASolution(const individual *i)
+void neuralNet::setWeightsFromNeuronsStructure(const vector<neuralFireflyStrategy::layer>* solution)
 {
-  assert(i->solution.size() == net.size()-1);
+  assert(solution->size() == net.size()-1);
 
   // For each non-output layer of nn
   for(int l = 0; l < net.size()-1; ++l)
   {
-    assert(i->solution.at(l).size() == net.at(l).size());
+    assert(solution->at(l).size() == net.at(l).size());
 
     // For each neuron in that layer
     for(int n = 0; n < net.at(l).size(); ++n)
     {
-      assert(i->solution.at(l).at(n).size() == net.at(l).at(n).getConnectionsNumber());
+      assert(solution->at(l).at(n).size() == net.at(l).at(n).getConnectionsNumber());
 
-      net.at(l).at(n).setOutputsWeights(&(i->solution.at(l).at(n)));
+      net.at(l).at(n).setOutputsWeights(&(solution->at(l).at(n)));
     }
   }
 }

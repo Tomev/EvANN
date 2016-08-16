@@ -11,29 +11,25 @@ class firefly
 {
 public:
 
-	firefly(i_fireflyStrategy* strategy)
-	{
-		this->strategy = strategy;
-	}
+	firefly(i_fireflyStrategy* strategy);
 
-	void initialize() { strategy->initialize();	}
+	void initialize();
+	void flyTowards(void* otherFireflyPosition);
 
-	void flyTowards(void* otherFireflyPosition)
-	{
-		strategy->flyTowards(otherFireflyPosition);
-	}
+	void setIllumination(double value);
+	double getIllumination();
+	void* getSolution();
 
-	void setIllumination(double value) {	illumination = value;	}
-	double getIllumination() { return illumination;	}
-	void* getSolution()	{	return strategy->getSolution(); }
-	std::string toString() { return strategy->toString(); }
-	void print(){ std::cout << this->toString() << std::endl; };
+	std::string toString();
+	void print();
 
 private:
 	/* Usually higher the illumination, better the solution */
 	double illumination;
 
-	i_fireflyStrategy* strategy;
+	i_fireflyStrategy* strategy = NULL;
+
+	bool hasStrategy();
 
 };
 

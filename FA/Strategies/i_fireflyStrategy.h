@@ -13,7 +13,8 @@ public:
 	virtual void initialize() = 0;
 	virtual void flyTowards(void* otherFireflyPosition) = 0;
 	virtual std::string toString() = 0;
-	//virtual ~i_fireflyStrategy() = 0; TODO
+	~i_fireflyStrategy() {};
+
 	// TODO: constant correctness
 
 protected:
@@ -30,8 +31,6 @@ protected:
 	double* baseAttraction = 0;
 	double* stepSize = 0;
 	double* absorption = 0;
-
-
 };
 
 #endif //GENEVANN_I_FIREFLYSTRATEGY_H

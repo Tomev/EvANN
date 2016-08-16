@@ -84,6 +84,16 @@ void neuralFireflyStrategy::generateRandomSolution(void *target, double stepSize
 /* Modifying solution according to basic formula (eg. wikipedia) */
 void neuralFireflyStrategy::flyTowards(void* otherFireflyPosition)
 {
+	// Generate sum element corresponding to random direction.
+	vector<layer> randomDirection;
+	generateRandomSolution(&randomDirection, *stepSize);
+
+	addSolutionToThisSolution(&randomDirection);
+
+	// If there is no other firefly position specified, firefly should fly in random direction only.
+	if(otherFireflyPosition == NULL) return;
+
+	// Else also fly towards other firefly
 	double squareDistance = countSquareDistance(otherFireflyPosition);
 
 	// Abort operations if squared distance is lower than 0
@@ -94,10 +104,6 @@ void neuralFireflyStrategy::flyTowards(void* otherFireflyPosition)
 
 	double attraction = countAttraction(squareDistance);
 
-	// Generate sum element corresponding to random direction.
-	vector<layer> randomDirection;
-	generateRandomSolution(&randomDirection, *stepSize);
-
 	// Count sum element corresponding to other firefly direction.
 	vector<layer> othersDirection;
 	subtractThisSolutionFromGivenSolution(otherFireflyPosition, &othersDirection);
@@ -105,7 +111,7 @@ void neuralFireflyStrategy::flyTowards(void* otherFireflyPosition)
 
 	// Add both elements to solution
 	addSolutionToThisSolution(&othersDirection);
-	addSolutionToThisSolution(&randomDirection);
+
 }
 
 double neuralFireflyStrategy::countSquareDistance(void *otherFireflyPosition)
