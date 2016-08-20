@@ -12,21 +12,25 @@ void neuron::createNewConnection(neuron *target)
   outputs.push_back(neuronOutput(target));
 }
 
-int neuron::getConnectionsNumber()
+unsigned int neuron::getConnectionsNumber()
 {
   return outputs.size();
 }
 
-void neuron::setOutputsWeights(const vector<double> *weights)
+void neuron::setOutputsWeightsAndBias(const vector<double> *weights)
 {
-  assert(weights->size() == outputs.size());
+	// -1 for bias
+  assert(weights->size() == outputs.size()-1);
 
-  // For each weight in given vector
-  for(int w = 0; w < weights->size(); ++w)
+  // For each weight in given vector excluding last one (which is bias)
+  for(int w = 0; w < weights->size() - 1; ++w)
   {
     // Set this weight as weight of w-th neurons output.
     outputs.at(w).weight = weights->at(w);
   }
+
+	// Set bias
+	bias = weights->at(weights->size()-1);
 }
 
 void neuron::resetInputValue()
@@ -36,7 +40,7 @@ void neuron::resetInputValue()
 
 void neuron::fire()
 {
-	baseOutput = activationFunction->getOutput(input);
+	baseOutput = activationFunction->getOutput(input + bias);
 
 	// For each output
 	for(int o = 0; o < outputs.size(); ++o)

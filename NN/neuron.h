@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 
-// TODO: Reconsider using linear function for continuous output.
 #include "Activation Functions/sigmoidFunction.h"
 #include "Activation Functions/linearFunction.h"
 
@@ -31,11 +30,12 @@ public:
 
   double input;
   double baseOutput;
+	double bias;
 
   void createNewConnection(neuron *target);
-  int getConnectionsNumber();
-  void setOutputsWeights(const vector<double> *weights);
+  void setOutputsWeightsAndBias(const vector<double> *weights);
   void resetInputValue();
+	unsigned int getConnectionsNumber();
 
   void fire();
 

@@ -116,9 +116,10 @@ void neuralNet::setWeightsFromNeuronsStructure(const vector<neuralFireflyStrateg
     // For each neuron in that layer
     for(int n = 0; n < net.at(l).size(); ++n)
     {
-      assert(solution->at(l).at(n).size() == net.at(l).at(n).getConnectionsNumber());
+	    // -1 for bias
+      assert(solution->at(l).at(n).size() -1  == net.at(l).at(n).getConnectionsNumber());
 
-      net.at(l).at(n).setOutputsWeights(&(solution->at(l).at(n)));
+      net.at(l).at(n).setOutputsWeightsAndBias(&(solution->at(l).at(n)));
     }
   }
 }
