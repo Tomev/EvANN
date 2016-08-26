@@ -18,6 +18,7 @@ public:
   void getResults(vector<double> *results);
 
 	string toString();
+  void print();
 
 protected:
 

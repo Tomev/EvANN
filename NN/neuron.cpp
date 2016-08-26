@@ -1,10 +1,16 @@
 #include "neuron.h"
 
 #include <cassert>
+#include <iostream>
 
 neuron::neuron()
 {
 	activationFunction = new sigmoidFunction();
+}
+
+neuron::neuron(i_activationFunction* function)
+{
+  this->activationFunction = function;
 }
 
 void neuron::createNewConnection(neuron *target)
@@ -20,7 +26,7 @@ unsigned int neuron::getConnectionsNumber()
 void neuron::setOutputsWeightsAndBias(const vector<double> *weights)
 {
 	// -1 for bias
-  assert(weights->size() == outputs.size()-1);
+  assert(weights->size() == outputs.size()+1);
 
   // For each weight in given vector excluding last one (which is bias)
   for(int w = 0; w < weights->size() - 1; ++w)
@@ -35,12 +41,12 @@ void neuron::setOutputsWeightsAndBias(const vector<double> *weights)
 
 void neuron::resetInputValue()
 {
-  input = 0;
+  input = bias;
 }
 
 void neuron::fire()
 {
-	baseOutput = activationFunction->getOutput(input + bias);
+	double baseOutput = activationFunction->getOutput(input);
 
 	// For each output
 	for(int o = 0; o < outputs.size(); ++o)
@@ -50,7 +56,23 @@ void neuron::fire()
 // TODO: For debugging purposes.
 string neuron::toString()
 {
-  string result = "";
+  string result = "Weights: ";
+
+  for(int w = 0; w < outputs.size(); ++w)
+  {
+    result += to_string(outputs.at(w).weight) + ", ";
+  }
+
+  // Pop coma and space bar.
+  result.pop_back();
+  result.pop_back();
+
+  result += " Bias: " + to_string(bias) + "\n";
 
   return result;
+}
+
+void neuron::print()
+{
+  cout << this->toString() << endl;
 }

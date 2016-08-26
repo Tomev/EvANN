@@ -68,9 +68,9 @@ void neuralFireflyStrategy::generateRandomSolution(void *target, double stepSize
 			// Add neuron to the solution
 			t->at(i).push_back(neuron());
 
-			// For each neuron in next layer
+			// For each neuron in next layer + bias
 			unsigned int nextLayerNo = i+1;
-			for(int k = 0; k < structure->at(nextLayerNo); ++k)
+			for(int k = 0; k < structure->at(nextLayerNo) + 1; ++k)
 			{
 				// Add random weight from selected distribution to current neuron
 				double weight = distribution->getRandomNumberFromDistribution() * stepSize;

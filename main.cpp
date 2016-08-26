@@ -19,7 +19,7 @@ static void printOutputs(vector<double> *outputs);
 
 static exponentialDistribution distribution;
 
-static neuralFireflyStrategy::topology topology = {3, 3, 2};
+static neuralFireflyStrategy::topology topology = {1, 4, 1};
 static vector<double> input = {3.14, 12.0, 7.0};
 static vector<double> output;
 static vector<testCase> cases;
@@ -36,6 +36,18 @@ string PAUSE;
 int main()
 {
   /* Setup */
+
+  firefly f(new neuralFireflyStrategy
+                (&stepSize, &baseAttraction, &absorption,
+                 &distribution, &topology));
+
+  f.initialize();
+
+  f.print();
+
+  nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)f.getSolution());
+
+  nn.print();
 
   // Set random seed for proper functioning of randomizers.
   srand(time(NULL));

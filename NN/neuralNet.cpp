@@ -1,6 +1,7 @@
 #include "neuralNet.h"
 
 #include <cassert>
+#include <iostream>
 
 // Creates neural net from given topology. Neurons connections are set, but all connections weights
 // are null.
@@ -100,7 +101,7 @@ void neuralNet::getResults(vector<double> *results)
   for(int n = 0; n < net.at(outLayerIdx).size(); ++n)
   {
     // Add output value to container.
-    results->push_back(net.at(outLayerIdx).at(n).baseOutput);
+    results->push_back(net.at(outLayerIdx).at(n).input);
   }
 }
 
@@ -143,4 +144,9 @@ string neuralNet::toString()
   }
 
   return result;
+}
+
+void neuralNet::print()
+{
+  cout << toString() << endl;
 }

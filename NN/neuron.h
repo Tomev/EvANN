@@ -27,10 +27,9 @@ typedef vector<neuron> layer;
 class neuron {
 public:
 	neuron();
+  neuron(i_activationFunction* function);
 
   double input;
-  double baseOutput;
-	double bias;
 
   void createNewConnection(neuron *target);
   void setOutputsWeightsAndBias(const vector<double> *weights);
@@ -40,10 +39,13 @@ public:
   void fire();
 
   string toString();
+  void print();
 
 private:
 	i_activationFunction *activationFunction;
 	vector<neuronOutput> outputs;
+
+  double bias = 0;
 
 };
 
