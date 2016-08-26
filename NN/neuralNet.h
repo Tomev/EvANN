@@ -6,7 +6,6 @@
 
 // TODO: constant correctness
 
-
 class neuralNet {
 public:
   neuralNet(const vector<unsigned int> *topology);

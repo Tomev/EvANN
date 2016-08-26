@@ -11,19 +11,25 @@ class swarm
 {
 
 public:
-	swarm(double* stepSize, double* baseAttraction, double* absorption,
-				unsigned int size, i_distribution* distribution, neuralFireflyStrategy::topology* fireflyStructure,
+	swarm(double* stepSize, double* baseAttraction, double* absorption, unsigned int size,
+				i_distribution* distribution, neuralFireflyStrategy::topology* fireflyStructure,
 				neuralNet* nn);
 
 	void findSolution();
+  void* getResult();
 
 private:
 
-	unsigned int iterations = 50000;
+	unsigned int iterations = 300;
+  double biggestError = 0.0;
 
 	vector<firefly> fireflies;
-	firefly* bestFirefly;
+	firefly* bestFirefly = NULL;
 	i_objectiveFunction* objectiveFunction = NULL;
+
+  firefly* findBrightestFirefly();
+  double normalize(double value);
+  void normalizeSwarm();
 
 };
 

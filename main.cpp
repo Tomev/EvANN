@@ -5,30 +5,21 @@
 
 #include "time.h"
 
-
-struct testCase
-{
-  vector<double> input;
-  vector<double> output;
-};
-
 using namespace std;
 
-
-static void printOutputs(vector<double> *outputs);
 
 static exponentialDistribution distribution;
 
 static neuralFireflyStrategy::topology topology = {1, 4, 1};
-static vector<double> input = {3.14, 12.0, 7.0};
 static vector<double> output;
-static vector<testCase> cases;
 
 static neuralNet nn(&topology);
+static neuralWessingerEvaluator evaluator(&nn);
 
-static double stepSize = 0.1;
-static double baseAttraction = 0.5;
-static double absorption = 5.0;
+static double stepSize = 0.01;
+static double baseAttraction = 1;
+static double absorption = 1.0;
+static unsigned int swarmSize = 50;
 
 // To pause console at some occasions.
 string PAUSE;
@@ -37,22 +28,23 @@ int main()
 {
   /* Setup */
 
-  firefly f(new neuralFireflyStrategy
-                (&stepSize, &baseAttraction, &absorption,
-                 &distribution, &topology));
-
-  f.initialize();
-
-  f.print();
-
-  nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)f.getSolution());
-
-  nn.print();
-
   // Set random seed for proper functioning of randomizers.
   srand(time(NULL));
 
   /* Setup finished */
+
+  swarm s(&stepSize, &baseAttraction, &absorption, swarmSize,
+          &distribution, &topology, &nn);
+
+  s.findSolution();
+
+  nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)s.getResult());
+  nn.print();
+
+  evaluator.printTestCases(s.getResult());
+
+
+
 
 
 	//cin >> PAUSE;

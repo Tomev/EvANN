@@ -5,16 +5,18 @@
 #include "../FA/Strategies/neuralFireflyStrategy.h"
 #include "../NN/neuralNet.h"
 
-class neuralFireflyEvaluator : public i_objectiveFunction
+class neuralWessingerEvaluator : public i_objectiveFunction
 {
 public:
 
-	neuralFireflyEvaluator(neuralNet* nn);
+	neuralWessingerEvaluator(neuralNet* nn);
 
 	double evaluate(void* solution);
+	void printTestCases(void *solution);
 
 private:
 	neuralNet* nn;
+	double calculateOutputValue(double input, double nnOutput);
 };
 
 
