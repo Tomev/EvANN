@@ -33,6 +33,9 @@ int main()
 
   /* Setup finished */
 
+  // FIREFLY ALGORITHM WITH EVALUATION
+
+  /*
   swarm s(&stepSize, &baseAttraction, &absorption, swarmSize,
           &distribution, &topology, &nn);
 
@@ -42,10 +45,15 @@ int main()
   nn.print();
 
   evaluator.printTestCases(s.getResult());
+  */
+
+  // FIREFLY ALGORITHM WITH EVALUATION
+
+  // GENERIC ALGORITHM WITH EVALUATION
 
 
 
-
+  // GENETIC ALGORITHM WITH EVALUATION
 
 	//cin >> PAUSE;
   return EXIT_SUCCESS;

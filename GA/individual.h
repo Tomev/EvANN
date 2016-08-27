@@ -1,57 +1,31 @@
-#ifndef GENEVANN_INDIVIDUAL_H
-#define GENEVANN_INDIVIDUAL_H
+#ifndef GENEVANN_I_INDIVIDUAL_H
+#define GENEVANN_I_INDIVIDUAL_H
 
-#include <vector>
-#include <string>
-#include <math.h>
+#include "Strategies/strategies.h"
+#include "../Distributions/distributions.h"
 
-#include "../Distributions/exponentialDistribution.h"
-
-using namespace std;
-
-class individual {
-
-	typedef vector<double> neuron;
-	typedef vector<neuron> layer;
-
+class individual
+{
 public:
-	individual();
-  individual(vector<int> *topology, i_distribution *distribution);
+
+  individual(i_strategy* strategy);
 
   void mutate();
-  individual cross(individual *parent);
+  void cross(void* solution, void* target);
 
-  string toString();
+  void setFitnessValue(double newValue);
+  double getFitnessValue();
 
-	void setFitnessValue(double val);
-	double getFitnessValue();
+  void* getSolution();
 
-	vector<layer> solution;
+  void print();
 
-private:
-  // TODO: Change to some kind of smart pointer.
-  vector<int> *topology = NULL;
-
-  double fitnessValue;
+protected:
+  double fitnessValue = 0.0;
 
   // TODO: Change to some kind of smart pointer.
-  i_distribution *distribution = NULL;
+  i_strategy* strategy;
 
-  // Biased and unbiased chromosome mutation probability. 10% is recommended.
-  double chromosomeMutationProbabilityPercent = 10;
-  // Number of nodes mutated during nodeMutation. Note that same node may be changed.
-  // 2 is recommended.
-  int numberOfNodesToMutate = 2;
-
-  void unbiasedMutation();
-  void biasedMutation();
-  void nodeMutation();
-
-  individual crossoverWeights(individual *parent);
-  individual crossoverNodes(individual *parent);
-
-
-  bool mutationOccurred();
 };
 
-#endif //GENEVANN_INDIVIDUAL_H
+#endif //GENEVANN_I_INDIVIDUAL_H

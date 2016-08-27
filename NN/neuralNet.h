@@ -16,6 +16,8 @@ public:
 	void resetNonInputLayerInputs();
   void getResults(vector<double> *results);
 
+  vector<unsigned int>* getTopology();
+
 	string toString();
   void print();
 
@@ -23,7 +25,7 @@ protected:
 
 private:
   vector<layer> net;
-
+  vector<unsigned int> *topology;
   void setNeuronConnections();
 };
 

@@ -2,12 +2,11 @@
 
 // Create and initialize fireflies swarm
 swarm::swarm( double *stepSize, double *baseAttraction, double *absorption, unsigned int size,
-              i_distribution *distribution, neuralFireflyStrategy::topology *fireflyStructure,
-							neuralNet* nn)
+              i_distribution *distribution, neuralNet* nn)
 {
 	// Create proper factory
 	fireflyFactory factory (stepSize, baseAttraction, absorption,
-	                        distribution, fireflyStructure);
+	                        distribution, nn->getTopology());
 
 	// Create adequate objective function
 	objectiveFunction = new neuralWessingerEvaluator(nn);
@@ -32,7 +31,7 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption, unsi
 	/* Find current brightest firefly (worst firefly) and
 	 * remember it's illumination value for normalization
 	 * purposes. */
-	biggestError = findBrightestFirefly()->getIllumination();
+	highestKnownError = findBrightestFirefly()->getIllumination();
 
 	normalizeSwarm();
 }
@@ -50,16 +49,19 @@ void swarm::normalizeSwarm()
 
 double swarm::normalize(double value)
 {
-	if(biggestError > 0) return 1 - value / biggestError;
+	if(highestKnownError > 0) return 1 - value / highestKnownError;
 	else return 1;
 }
 
+// TODO when moving firefly add method to do all the moving logic
+// eg. move ff, update its fitness, check for highestKnownError...
+
 void swarm::findSolution()
 {
-	// DEBUG TODO
+	// DEBUG
 	bestFirefly = findBrightestFirefly();
 	cout << "Start error = " << objectiveFunction->evaluate(bestFirefly->getSolution()) << endl;
-  cout << "Biggest error = " << biggestError << endl;
+  cout << "Biggest error = " << highestKnownError << endl;
 	// END DEBUG
 
 	// For each iteration
@@ -86,7 +88,7 @@ void swarm::findSolution()
 					double newPositionError = objectiveFunction->evaluate(fly_i->getSolution());
 
 					// Update biggest error if newPositionError is bigger
-					if(newPositionError > biggestError) biggestError = newPositionError;
+					if(newPositionError > highestKnownError) highestKnownError = newPositionError;
 
 					// Set normalized error as new firefly illumination
 					fly_i->setIllumination(normalize(newPositionError));
@@ -105,7 +107,7 @@ void swarm::findSolution()
         double newPositionError = objectiveFunction->evaluate(fly_i->getSolution());
 
         // Update biggest error if newPositionError is bigger
-        if(newPositionError > biggestError) biggestError = newPositionError;
+        if(newPositionError > highestKnownError) highestKnownError = newPositionError;
 
         // Set normalized error as new firefly illumination
         fly_i->setIllumination(normalize(newPositionError));
@@ -120,7 +122,7 @@ void swarm::findSolution()
 	cout << endl;
 
 	bestFirefly = findBrightestFirefly();
-  cout << "Biggest error = " << biggestError << endl;
+  cout << "Biggest error = " << highestKnownError << endl;
 	cout << "End error = " << objectiveFunction->evaluate(bestFirefly->getSolution());
 }
 

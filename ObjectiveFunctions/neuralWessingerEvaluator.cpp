@@ -86,7 +86,6 @@ void neuralWessingerEvaluator::printTestCases(void *solution)
   }
 }
 
-
 /* Calculates value of Wessinger equation for given input and
  * neural network output. The origin of "magic values" can be
  * found in work "Using Evolutionary Algorithms for solving a

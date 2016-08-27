@@ -20,8 +20,8 @@ public:
 protected:
 
 	virtual double countSquareDistance(void* otherFireflyPosition) = 0;
-	virtual void generateRandomSolution(void* target, double stepSize = 1) = 0;
 	virtual double countAttraction(double squareDistance) = 0;
+	virtual void generateRandomSolution(void* target, double stepSize = 1) = 0;
 	virtual void subtractThisSolutionFromGivenSolution(void* otherSolution, void* target) = 0;
 	virtual void addSolutionToThisSolution(void* otherSolution) = 0;
 	virtual void multiplySolution(void* target, double coefficient) = 0;

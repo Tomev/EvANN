@@ -105,6 +105,13 @@ void neuralNet::getResults(vector<double> *results)
   }
 }
 
+// Returns pointer to nets topology
+vector<unsigned int>* neuralNet::getTopology()
+{
+  return topology;
+}
+
+// Use structure predefined in work to set neural nets weights and biases
 void neuralNet::setWeightsFromNeuronsStructure(const vector<neuralFireflyStrategy::layer>* solution)
 {
   assert(solution->size() == net.size()-1);
@@ -146,6 +153,7 @@ string neuralNet::toString()
   return result;
 }
 
+// For debug purposes
 void neuralNet::print()
 {
   cout << toString() << endl;

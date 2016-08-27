@@ -12,8 +12,7 @@ class swarm
 
 public:
 	swarm(double* stepSize, double* baseAttraction, double* absorption, unsigned int size,
-				i_distribution* distribution, neuralFireflyStrategy::topology* fireflyStructure,
-				neuralNet* nn);
+				i_distribution* distribution, neuralNet* nn);
 
 	void findSolution();
   void* getResult();
@@ -21,7 +20,7 @@ public:
 private:
 
 	unsigned int iterations = 300;
-  double biggestError = 0.0;
+  double highestKnownError = 0.0;
 
 	vector<firefly> fireflies;
 	firefly* bestFirefly = NULL;
