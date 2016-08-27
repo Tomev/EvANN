@@ -1,19 +1,20 @@
-#ifndef GENEVANN_STRATEGY_H
-#define GENEVANN_STRATEGY_H
+#ifndef GENEVANN_I_STRATEGY_H
+#define GENEVANN_I_STRATEGY_H
 
 #include <string>
 
 class i_strategy
 {
 public:
-  virtual ~i_strategy() = 0;
+  //virtual ~i_strategy() = 0;
 
-  void mutate();
+  virtual void mutate() = 0;
+  virtual void cross(void* solution, void* target) = 0;
 
-  void* getSolution();
-  void setSolution(void* newSolution);
+  virtual void* getSolution() = 0;
+  virtual void setSolution(void* newSolution) = 0;
   virtual std::string toString() = 0;
 };
 
 
-#endif //GENEVANN_STRATEGY
+#endif //GENEVANN_I_STRATEGY

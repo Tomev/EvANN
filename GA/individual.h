@@ -4,6 +4,8 @@
 #include "Strategies/strategies.h"
 #include "../Distributions/distributions.h"
 
+class i_strategy;
+
 class individual
 {
 public:
@@ -11,21 +13,21 @@ public:
   individual(i_strategy* strategy);
 
   void mutate();
-  void cross(void* solution, void* target);
+  void cross(void* solution, individual* target);
 
   void setFitnessValue(double newValue);
   double getFitnessValue();
 
   void* getSolution();
+  void setSolution(void* newSolution);
 
   void print();
 
 protected:
   double fitnessValue = 0.0;
 
-  // TODO: Change to some kind of smart pointer.
-  i_strategy* strategy;
-
+  //TR TODO: Change to some kind of smart pointer.
+  i_strategy* strategy = NULL;
 };
 
 #endif //GENEVANN_I_INDIVIDUAL_H

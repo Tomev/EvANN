@@ -1,9 +1,10 @@
 #ifndef GENEVANN_INDIVIDUALSFACTORY_H
 #define GENEVANN_INDIVIDUALSFACTORY_H
 
+
 #include "../NN/neuralNet.h"
 #include "individual.h"
-#include "";
+#include "Strategies/strategies.h"
 
 class individualsFactory
 {
@@ -19,6 +20,7 @@ private:
   neuralNet* nn = NULL;
   unsigned int individualStrategyId = 0;
 
+  individual createNeuralIndividual();
 
 };
 

@@ -7,7 +7,7 @@ class i_distribution {
 
 public:
 
-  virtual ~i_distribution() = 0;
+  //virtual ~i_distribution() = 0;
 
   virtual double getRandomNumberFromDistribution() = 0;
 

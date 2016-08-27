@@ -5,7 +5,7 @@
 
 enum scalingFunctionsIds
 {
-  normalizedSimpleScalingFunction
+  normalizedSimpleScaling
 };
 
 #endif //GENEVANN_SCALINGFUNCTIONS_H

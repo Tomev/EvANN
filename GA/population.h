@@ -4,6 +4,7 @@
 #include "individual.h"
 #include "../ObjectiveFunctions/objectiveFunctions.h"
 #include "Selectors/i_selector.h"
+#include "individualsFactory.h"
 
 class population {
 public:
@@ -20,6 +21,7 @@ protected:
 
   // TODO: Change to some kind of smart pointer.
   individual* bestIndividual = NULL;
+  individualsFactory* factory = NULL;
   i_objectiveFunction* objectiveFunction = NULL;
   i_selector* selector = NULL;
   i_distribution* distribution = NULL;

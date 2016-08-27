@@ -2,10 +2,9 @@
 
 using namespace std;
 
-firefly::firefly(i_fireflyStrategy *strategy)
-{
-	this->strategy = strategy;
-}
+firefly::firefly(i_fireflyStrategy *strategy) :
+strategy(strategy)
+{ }
 
 void firefly::initialize()
 {

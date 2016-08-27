@@ -201,7 +201,7 @@ void neuralIndividualStrategy::crossoverWeights(void *solution, void *target)
       for (unsigned int w = 0; w < this->solution.at(l).at(n).size(); ++w)
       {
         // Randomly select dominant parent
-        dominantParent = (rand() % 2 == 0) ? this->solution : parent;
+        dominantParent = (rand() % 2 == 0) ? &this->solution : parent;
 
         // Set child's trait on this position same to dominantParent.
         t->at(l).at(n).push_back(dominantParent->at(l).at(n).at(w));
@@ -238,7 +238,7 @@ void neuralIndividualStrategy::crossoverNodes(void *solution, void *target)
     for (unsigned int n = 0; n < this->solution.at(l).size(); ++n)
     {
       // Randomly select dominant parent
-      dominantParent = (rand() % 2 == 0) ? this->solution : parent;
+      dominantParent = (rand() % 2 == 0) ? &this->solution : parent;
 
       // Set child's trait on this position same to dominantParent.
       t->at(l).push_back(dominantParent->at(l).at(n));

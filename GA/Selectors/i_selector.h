@@ -9,17 +9,17 @@
 class i_selector
 {
 public:
-  virtual ~i_selector() = 0;
+  //virtual ~i_selector() = 0;
 
   virtual unsigned int selectIndividual() = 0;
 
-  void setNewPopulation(std::vector<individual*>* population)
+  void setNewPopulation(std::vector<individual>* population)
   {
     this->population = population;
   };
 
 protected:
-  std::vector<individual*>* population = 0;
+  std::vector<individual>* population = 0;
   i_scalingFunction* scalingFunction;
 };
 

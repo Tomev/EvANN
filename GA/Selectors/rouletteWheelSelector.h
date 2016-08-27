@@ -8,9 +8,13 @@ class rouletteWheelSelector : public i_selector
 {
 public:
 
-  rouletteWheelSelector(std::vector<individual*>* population, int scalingFunctionId);
+  rouletteWheelSelector(std::vector<individual>* population, int scalingFunctionId);
 
   unsigned int selectIndividual();
+
+protected:
+  std::vector<individual>* population = 0;
+  i_scalingFunction* scalingFunction;
 };
 
 

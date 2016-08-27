@@ -10,14 +10,17 @@ distribution(distribution)
 	// Add proper objective function
 	objectiveFunction = new neuralWessingerEvaluator(nn);
 
+  // Create factory
+  factory = new individualsFactory(nn, distribution);
+
 	// Initialize population
 
 	// For each expected individual in the population
 	for(unsigned int i = 0; i < size; ++i)
 	{
 		// Add individual to the population
-		individuals.push_back(new nnIndividual(nn->getTopology(), distribution));
-		individual* currentIndividual = individuals.at(i);
+		individuals.push_back(factory->createIndividual());
+		individual* currentIndividual = &individuals.at(i);
 
 		/* Evaluate this individual. Note that currently it is it's error
 		 * not it's actual, normalized fitness value. */
@@ -34,7 +37,7 @@ distribution(distribution)
 	normalizePopulation();
 
   // Add proper selector
-  selector = new rouletteWheelSelector(&individuals, normalizedSimpleScalingFunction);
+  selector = new rouletteWheelSelector(&individuals, normalizedSimpleScaling);
 }
 
 /* It's the main method of the population, which holds all the computing.
@@ -93,13 +96,12 @@ void population::createOffspringPopulation()
     // Ensure DIFFERENT parents are selected
     while(i == j) j = selector->selectIndividual();
 
-    individual* p1 = individuals.at(i);
-    individual* p2 = individuals.at(j);
+    individual* p1 = &individuals.at(i);
+    individual* p2 = &individuals.at(j);
 
     // Add new individual to offsprings
-    offsprings.push_back(new nnIndividual(p1, p2, distribution));
+    offsprings.push_back(factory->createIndividual(p1, p2));
   }
-
 }
 
 // Mutate individuals in old population basing on given mutation chance
@@ -115,10 +117,10 @@ void population::mutateOldPopulation()
     // Mutate i-th individual if mutation occurred
     if(mutationRollValue <= mutationChancePercent)
     {
-      individuals.at(i)->mutate();
+      individuals.at(i).mutate();
 
       // Evaluate individual
-      double individualsError = objectiveFunction->evaluate(individuals.at(i)->getSolution());
+      double individualsError = objectiveFunction->evaluate(individuals.at(i).getSolution());
 
       // Update error data if needed
       highestKnownError =
@@ -126,7 +128,7 @@ void population::mutateOldPopulation()
          individualsError : highestKnownError;
 
       // Update individuals fitness
-      individuals.at(i)->setFitnessValue(normalize(individualsError));
+      individuals.at(i).setFitnessValue(normalize(individualsError));
 
     }
   }
@@ -140,7 +142,7 @@ void population::selectNewPopulation()
   unsigned int size = individuals.size();
 
   // Create helper population for selector containing both populations
-  vector<individual*> helperPopulation;
+  vector<individual> helperPopulation;
 
   // For each individual in both populations
   for(unsigned int i = 0; i < individuals.size(); ++i)
@@ -170,13 +172,6 @@ void population::selectNewPopulation()
     helperPopulation.erase(helperPopulation.begin() + index);
   }
 
-  // Delete unused pointers form helper population
-  // For each remaining individual in helper population
-  for(unsigned int i = 0; i < helperPopulation.size(); ++i)
-  {
-    delete helperPopulation.at(i);
-  }
-
   // Clear offsprings and helperPopulation
   offsprings.clear();
   helperPopulation.clear();
@@ -197,7 +192,7 @@ void population::normalizePopulation()
 {
 	for(int i = 0; i < individuals.size(); ++i)
 	{
-		individual* currentIndividual = individuals.at(i);
+		individual* currentIndividual = &individuals.at(i);
 		currentIndividual->setFitnessValue(normalize(currentIndividual->getFitnessValue()));
 	}
 }
@@ -207,18 +202,18 @@ double population::normalize(double target)
 {
 	return 1 - (target / highestKnownError);
 }
-6
+
 // Method used to find best individual in the population.
 // Best individual is the one with highest fitness value.
 void population::findBestIndividual()
 {
 	// Set first individual as best one
-	bestIndividual = individuals.at(0);
+	bestIndividual = &individuals.at(0);
 
 	// For each other individual in population
 	for(unsigned int i = 1; i < individuals.size(); ++i)
 	{
-		bestIndividual = (individuals.at(i)->getFitnessValue() > bestIndividual->getFitnessValue()) ?
-											individuals.at(i) : bestIndividual;
+		bestIndividual = (individuals.at(i).getFitnessValue() > bestIndividual->getFitnessValue()) ?
+											&individuals.at(i) : bestIndividual;
 	}
 }

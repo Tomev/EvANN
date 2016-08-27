@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "Distributions/distributions.h"
 #include "FA/swarm.h"
 #include "GA/population.h"
 
@@ -50,6 +51,7 @@ int main()
   // FIREFLY ALGORITHM WITH EVALUATION
 
   // GENERIC ALGORITHM WITH EVALUATION
+
 
 
 
