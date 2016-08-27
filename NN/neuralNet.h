@@ -8,7 +8,7 @@
 
 class neuralNet {
 public:
-  neuralNet(const vector<unsigned int> *topology);
+  neuralNet(vector<unsigned int> *topology);
 
 	void setInputsValue(const vector<double> *inputs);
 	void setWeightsFromNeuronsStructure(const vector<neuralFireflyStrategy::layer>* solution);

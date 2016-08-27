@@ -5,7 +5,8 @@
 
 // Creates neural net from given topology. Neurons connections are set, but all connections weights
 // are null.
-neuralNet::neuralNet(const vector<unsigned int> *topology)
+neuralNet::neuralNet(vector<unsigned int> *topology) :
+topology(topology)
 {
   // For each layer in topology
   for(int l = 0; l < topology->size(); ++l)

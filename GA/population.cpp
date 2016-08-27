@@ -21,6 +21,7 @@ distribution(distribution)
 		// Add individual to the population
 		individuals.push_back(factory->createIndividual());
 		individual* currentIndividual = &individuals.at(i);
+    currentIndividual->print();
 
 		/* Evaluate this individual. Note that currently it is it's error
 		 * not it's actual, normalized fitness value. */

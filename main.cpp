@@ -52,7 +52,7 @@ int main()
 
   // GENERIC ALGORITHM WITH EVALUATION
 
-
+  population p(swarmSize, &nn, &distribution);
 
 
   // GENETIC ALGORITHM WITH EVALUATION

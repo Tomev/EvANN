@@ -1,3 +1,4 @@
+#include <iostream>
 #include "individualsFactory.h"
 
 individualsFactory::individualsFactory(neuralNet *nn, i_distribution *distribution) :
@@ -24,12 +25,7 @@ individual individualsFactory::createIndividual(individual *p1, individual *p2)
   switch(individualStrategyId)
   {
     case neuralIndividual:
-      offspring = individual(
-          new neuralIndividualStrategy(
-              nn->getTopology(),
-              distribution
-          )
-      );
+      offspring = createNeuralIndividual();
       break;
     default:
       offspring = individual(NULL);
@@ -43,6 +39,8 @@ individual individualsFactory::createIndividual(individual *p1, individual *p2)
 
 individual individualsFactory::createNeuralIndividual()
 {
+  cout << "Creating neural individual." << endl;
+
   return individual(
       new neuralIndividualStrategy(
           nn->getTopology(), distribution

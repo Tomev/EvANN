@@ -38,8 +38,8 @@ neuralIndividualStrategy::neuralIndividualStrategy
         // Add new neuron (which is vector of weights) to solution
         solution.at(l).push_back(neuron());
 
-        // For each potential weight
-        for(unsigned int w = 0; w < topology->at(l+1); ++w)
+        // For each potential weight + bias
+        for(unsigned int w = 0; w < topology->at(l+1) + 1; ++w)
         {
           // Add new weight selected from given distribution to the vector
           solution.at(l).at(n).push_back(distribution->getRandomNumberFromDistribution());
