@@ -12,6 +12,10 @@ public:
 
   unsigned int selectIndividual();
 
+  void setNewPopulation(std::vector<individual>* population);
+  void setMaximalValue(double val);
+  void selectParents(unsigned int* p1, unsigned int* p2);
+
 protected:
   std::vector<individual>* population = 0;
   i_scalingFunction* scalingFunction;

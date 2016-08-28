@@ -11,6 +11,8 @@ public:
 
   double scaleValue(double value);
 
+  void setMaximalValue(double newValue);
+
 private:
 
   double maximalValue = 1.0;

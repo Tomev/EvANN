@@ -2,6 +2,8 @@
 
 #include "individual.h"
 
+individual::individual() {};
+
 individual::individual(i_strategy* strategy) :
 strategy(strategy)
 {}

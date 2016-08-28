@@ -13,10 +13,9 @@ public:
 
   virtual unsigned int selectIndividual() = 0;
 
-  void setNewPopulation(std::vector<individual>* population)
-  {
-    this->population = population;
-  };
+  virtual void selectParents(unsigned int* p1, unsigned int* p2) = 0;
+  virtual void setNewPopulation(std::vector<individual>* population) = 0;
+  virtual void setMaximalValue(double val) = 0;
 
 protected:
   std::vector<individual>* population = 0;

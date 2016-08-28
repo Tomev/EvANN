@@ -123,7 +123,7 @@ void swarm::findSolution()
 
 	bestFirefly = findBrightestFirefly();
   cout << "Biggest error = " << highestKnownError << endl;
-	cout << "End error = " << objectiveFunction->evaluate(bestFirefly->getSolution());
+	cout << "End error = " << objectiveFunction->evaluate(bestFirefly->getSolution()) << endl;
 }
 
 firefly* swarm::findBrightestFirefly()

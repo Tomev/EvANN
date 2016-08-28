@@ -1,11 +1,12 @@
 #ifndef GENEVANN_SCALINGFUNCTIONS_H
 #define GENEVANN_SCALINGFUNCTIONS_H
 
-#include "normalizedSimpleScalingFunction.h"
+#include "normalizedSimpleMaximizationScalingFunction.h"
+#include "errorBasedProgressingScalingFunction.h"
 
 enum scalingFunctionsIds
 {
-  normalizedSimpleScaling
+  normalizedSimpleScaling, errorBasedProgressing
 };
 
 #endif //GENEVANN_SCALINGFUNCTIONS_H

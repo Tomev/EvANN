@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath>
+
 #include "neuralWessingerEvaluator.h"
 
 neuralWessingerEvaluator::neuralWessingerEvaluator(neuralNet *nn)
@@ -49,6 +51,8 @@ double neuralWessingerEvaluator::evaluate(void *solution)
 // Evaluate and print error for each test case
 void neuralWessingerEvaluator::printTestCases(void *solution)
 {
+  double overallError = 0.0;
+
   vector<neuralFireflyStrategy::layer>* target =
       static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
 
@@ -79,11 +83,16 @@ void neuralWessingerEvaluator::printTestCases(void *solution)
     cout << " expectedVal = " << expectedVal;
     cout << " receivedVal = " << receivedVal << endl;
 
+    overallError += abs(expectedVal-receivedVal);
+
+
     // Prepare vectors and nn for another iteration
     input.clear();
     output.clear();
     nn->resetNonInputLayerInputs();
   }
+
+  cout << "Total error: " << overallError << endl;
 }
 
 /* Calculates value of Wessinger equation for given input and

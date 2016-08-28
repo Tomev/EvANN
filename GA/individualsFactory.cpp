@@ -39,8 +39,6 @@ individual individualsFactory::createIndividual(individual *p1, individual *p2)
 
 individual individualsFactory::createNeuralIndividual()
 {
-  cout << "Creating neural individual." << endl;
-
   return individual(
       new neuralIndividualStrategy(
           nn->getTopology(), distribution

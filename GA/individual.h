@@ -10,6 +10,7 @@ class individual
 {
 public:
 
+  individual();
   individual(i_strategy* strategy);
 
   void mutate();

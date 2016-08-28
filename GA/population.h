@@ -17,7 +17,7 @@ public:
 protected:
 	double highestKnownError = 0.0;
   unsigned int mutationChancePercent = 5;
-  unsigned int iterations = 300;
+  unsigned int iterations = 50000;
 
   // TODO: Change to some kind of smart pointer.
   individual* bestIndividual = NULL;
@@ -28,6 +28,8 @@ protected:
 
   vector<individual> individuals;
   vector<individual> offsprings;
+
+  individual bestSolutionHolder;
 
   void findBestIndividual();
   void createOffspringPopulation();
