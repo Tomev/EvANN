@@ -3,8 +3,9 @@
 #include "Selectors/selectors.h"
 
 // Constructor for neural net oriented population
-population::population(unsigned int size, neuralNet* nn, i_distribution* distribution) :
-distribution(distribution)
+population::population(unsigned int size, unsigned int iterations,
+                       neuralNet* nn, i_distribution* distribution) :
+iterations(iterations), distribution(distribution)
 {
 	// Add proper objective function
 	objectiveFunction = new neuralWessingerEvaluator(nn);
@@ -17,6 +18,8 @@ distribution(distribution)
 
 	// Initialize population
 
+	double individualsError;
+
 	// For each expected individual in the population
 	for(unsigned int i = 0; i < size; ++i)
 	{
@@ -26,17 +29,15 @@ distribution(distribution)
 
 		/* Evaluate this individual. Note that currently it is it's error
 		 * not it's actual, normalized fitness value. */
-		currentIndividual->setFitnessValue(objectiveFunction->evaluate(currentIndividual->getSolution()));
+		individualsError = objectiveFunction->evaluate(currentIndividual->getSolution());
+		currentIndividual->setEvaluationValue(individualsError);
+
+		if(individualsError > highestKnownError)
+			highestKnownError = individualsError;
 	}
 
-	/* Find individual with the highest error. findBestIndividual() can
-	 * be used, as fitness value of each individual holds it's error now. */
-	findBestIndividual();
-
-	highestKnownError = bestIndividual->getFitnessValue();
-
 	// Having highest known error begin normalization of the population.
-	normalizePopulation();
+	normalizePopulation(&individuals);
 
   // Add proper selector
   selector = new rouletteWheelSelector(&individuals, normalizedSimpleScaling);
@@ -112,10 +113,15 @@ void population::createOffspringPopulation()
     // Evaluate individual
     double individualsError = objectiveFunction->evaluate(newIndividual->getSolution());
 
-    // Update error data if needed
-    highestKnownError =
-        (individualsError > highestKnownError) ?
-        individualsError : highestKnownError;
+	  // Update error data if needed
+	  if(individualsError > highestKnownError)
+	  {
+		  highestKnownError = individualsError;
+
+		  // Normalize populations fitness according to new error
+		  normalizePopulation(&offsprings);
+		  normalizePopulation(&individuals);
+	  }
 
     // Evaluate new individual
     newIndividual->setFitnessValue(normalize(individualsError));
@@ -141,9 +147,14 @@ void population::mutateOldPopulation()
       double individualsError = objectiveFunction->evaluate(individuals.at(i).getSolution());
 
       // Update error data if needed
-      highestKnownError =
-        (individualsError > highestKnownError) ?
-         individualsError : highestKnownError;
+      if(individualsError > highestKnownError)
+      {
+	      highestKnownError = individualsError;
+
+	      // Normalize populations fitness according to new error
+	      normalizePopulation(&offsprings);
+	      normalizePopulation(&individuals);
+      }
 
       // Update individuals fitness
       individuals.at(i).setFitnessValue(normalize(individualsError));
@@ -212,23 +223,19 @@ void* population::getResult()
 
 // Normalize fitness values of whole population to [0,1], where 1 is the most
 // desirable fitness.
-void population::normalizePopulation()
+void population::normalizePopulation(vector<individual>* population)
 {
-	for(int i = 0; i < individuals.size(); ++i)
+	for(int i = 0; i < population->size(); ++i)
 	{
-		individual* currentIndividual = &individuals.at(i);
-		currentIndividual->setFitnessValue(normalize(currentIndividual->getFitnessValue()));
+		individual* currentIndividual = &population->at(i);
+		currentIndividual->setFitnessValue(normalize(currentIndividual->getEvaluationValue()));
 	}
 }
 
 // Normalizing target value according to biggest known error.
 double population::normalize(double target)
 {
-  double val = 1 - (target / highestKnownError);
-
-  //cout << val << endl;
-
-	return val;
+	return 1 - (target / highestKnownError);
 }
 
 // Method used to find best individual in the population.

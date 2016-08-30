@@ -10,6 +10,7 @@ public:
 	{
 		return slope * val + yIntercept;
 	}
+
 private:
 	double slope = 1.0; // a coefficient
 	double yIntercept = 0.0; // b coefficient

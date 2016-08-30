@@ -21,6 +21,7 @@ double neuralWessingerEvaluator::evaluate(void *solution)
 	vector<double> input;
 	vector<double> output;
   double expectedVal, receivedVal, testCase;
+	unsigned int denominator = 0;
 
   // For each test case (which are cases form 1.1 to 3.9)
   for(unsigned int t = 11; t < 40; ++t)
@@ -39,13 +40,17 @@ double neuralWessingerEvaluator::evaluate(void *solution)
     receivedVal = calculateOutputValue(testCase, output.at(0));
 
 		error += pow(expectedVal - receivedVal, 2.0);
+
+	  // Increase denominator for each test case
+	  ++denominator;
+
 		// Prepare vectors and nn for another iteration
 		input.clear();
 		output.clear();
     nn->resetNonInputLayerInputs();
 	}
 
-	return error;
+	return error / denominator;
 }
 
 // Evaluate and print error for each test case
@@ -81,9 +86,10 @@ void neuralWessingerEvaluator::printTestCases(void *solution)
 
     cout << "t = " << testCase;
     cout << " expectedVal = " << expectedVal;
-    cout << " receivedVal = " << receivedVal << endl;
+    cout << " receivedVal = " << receivedVal;
+	  cout << " error = " << expectedVal - receivedVal << endl;
 
-    overallError += abs(expectedVal-receivedVal);
+    overallError += pow((expectedVal-receivedVal), 2);
 
 
     // Prepare vectors and nn for another iteration

@@ -1,6 +1,7 @@
 #include <typeinfo>
 #include <iostream>
 #include <math.h>
+#include <cassert>
 
 #include "neuralFireflyStrategy.h"
 
@@ -35,6 +36,37 @@ neuralFireflyStrategy::~neuralFireflyStrategy()
 void* neuralFireflyStrategy::getSolution()
 {
 	return solution;
+}
+
+void neuralFireflyStrategy::setSolution(void *newSolution)
+{
+	/* As copying pointer won't do the trick each value in current
+   * individuals solution vector is replaced by adequate value from
+   * new solution. Note that size of new solution and current solution
+   * are meant to be same. */
+
+	vector<layer>* parent = (vector<layer>*) newSolution;
+
+	assert(parent->size() == solution->size());
+
+	// For each layer
+	for(unsigned int l = 0; l < solution->size(); ++l)
+	{
+		assert(parent->at(l).size() == solution->at(l).size());
+
+		// For each neuron on that layer
+		for(unsigned int n = 0; n < solution->at(l).size(); ++n)
+		{
+			assert(parent->at(l).at(n).size() == solution->at(l).at(n).size());
+
+			// For each weight of that neuron
+			for(unsigned int w = 0; w < solution->at(l).at(n).size(); ++w)
+			{
+				// Replace solutions value at current weight
+				solution->at(l).at(n).at(w) = parent->at(l).at(n).at(w);
+			}
+		}
+	}
 }
 
 /* Initialize solution with random values from given distribution and structure. */

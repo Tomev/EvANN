@@ -10,6 +10,7 @@ class i_fireflyStrategy
 public:
 
 	virtual void* getSolution() = 0;
+	virtual void setSolution(void* newSolution) = 0;
 	virtual void initialize() = 0;
 	virtual void flyTowards(void* otherFireflyPosition) = 0;
 	virtual std::string toString() = 0;

@@ -18,6 +18,8 @@ public:
 
   void setFitnessValue(double newValue);
   double getFitnessValue();
+  void setEvaluationValue(double value);
+  double getEvaluationValue();
 
   void* getSolution();
   void setSolution(void* newSolution);
@@ -26,6 +28,7 @@ public:
 
 protected:
   double fitnessValue = 0.0;
+  double evaluationValue = 0.0;
 
   //TR TODO: Change to some kind of smart pointer.
   i_strategy* strategy = NULL;

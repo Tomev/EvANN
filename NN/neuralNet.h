@@ -16,6 +16,10 @@ public:
 	void resetNonInputLayerInputs();
   void getResults(vector<double> *results);
 
+	double getNeuronsBias(unsigned int layerNo, unsigned int neuronNo);
+	double getNeuronsIthOutputWeight(unsigned int layerNo, unsigned int neuronNo, unsigned int i);
+
+
   vector<unsigned int>* getTopology();
 
 	string toString();

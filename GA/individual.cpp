@@ -28,6 +28,16 @@ double individual::getFitnessValue()
   return fitnessValue;
 }
 
+void individual::setEvaluationValue(double value)
+{
+  evaluationValue = value;
+}
+
+double individual::getEvaluationValue()
+{
+  return evaluationValue;
+}
+
 void* individual::getSolution()
 {
   strategy->getSolution();

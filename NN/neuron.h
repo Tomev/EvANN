@@ -36,6 +36,9 @@ public:
   void resetInputValue();
 	unsigned int getConnectionsNumber();
 
+	double getBiasValue();
+	double getIthOutputWeight(unsigned int i);
+
   void fire();
 
   string toString();

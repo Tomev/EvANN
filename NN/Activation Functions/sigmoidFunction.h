@@ -1,6 +1,7 @@
 #ifndef GENEVANN_SIGMOIDFUNCTION_H
 #define GENEVANN_SIGMOIDFUNCTION_H
 
+#include <cassert>
 #include "i_activationFunction.h"
 #include "math.h"
 

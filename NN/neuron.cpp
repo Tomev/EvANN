@@ -53,6 +53,16 @@ void neuron::fire()
 		outputs.at(o).target->input += outputs.at(o).weight * baseOutput;
 }
 
+double neuron::getBiasValue()
+{
+	return bias;
+}
+
+double neuron::getIthOutputWeight(unsigned int i)
+{
+	return outputs.at(i).weight;
+}
+
 // TODO: For debugging purposes.
 string neuron::toString()
 {

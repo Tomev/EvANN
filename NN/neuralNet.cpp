@@ -154,6 +154,16 @@ string neuralNet::toString()
   return result;
 }
 
+double neuralNet::getNeuronsBias(unsigned int layerNo, unsigned int neuronNo)
+{
+	return net.at(layerNo).at(neuronNo).getBiasValue();
+}
+
+double neuralNet::getNeuronsIthOutputWeight(unsigned int layerNo, unsigned int neuronNo, unsigned int i)
+{
+	return net.at(layerNo).at(neuronNo).getIthOutputWeight(i);
+}
+
 // For debug purposes
 void neuralNet::print()
 {

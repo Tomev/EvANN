@@ -11,20 +11,23 @@ class swarm
 {
 
 public:
-	swarm(double* stepSize, double* baseAttraction, double* absorption, unsigned int size,
-				i_distribution* distribution, neuralNet* nn);
+	swarm( double *stepSize, double *baseAttraction, double *absorption,
+	       unsigned int size, unsigned int iterations,
+	       i_distribution *distribution, neuralNet* nn);
 
 	void findSolution();
   void* getResult();
 
 private:
 
-	unsigned int iterations = 300;
+	unsigned int iterations = 10000;
   double highestKnownError = 0.0;
 
 	vector<firefly> fireflies;
 	firefly* bestFirefly = NULL;
 	i_objectiveFunction* objectiveFunction = NULL;
+
+	firefly bestSolutionHolder;
 
   firefly* findBrightestFirefly();
   double normalize(double value);

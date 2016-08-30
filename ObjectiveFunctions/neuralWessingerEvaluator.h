@@ -8,7 +8,6 @@
 class neuralWessingerEvaluator : public i_objectiveFunction
 {
 public:
-
 	neuralWessingerEvaluator(neuralNet* nn);
 
 	double evaluate(void* solution);

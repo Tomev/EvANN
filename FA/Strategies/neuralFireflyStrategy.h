@@ -19,6 +19,7 @@ public:
 	neuralFireflyStrategy(  double* stepSize, double* baseAttraction, double* absorption,
 													i_distribution* distribution, topology* top);
 	void* getSolution();
+	void setSolution(void* newSolution);
 	void initialize();
 	void flyTowards(void* otherFireflyPosition);
 	string toString();

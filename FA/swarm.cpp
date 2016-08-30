@@ -1,8 +1,10 @@
 #include "swarm.h"
 
 // Create and initialize fireflies swarm
-swarm::swarm( double *stepSize, double *baseAttraction, double *absorption, unsigned int size,
-              i_distribution *distribution, neuralNet* nn)
+swarm::swarm( double *stepSize, double *baseAttraction, double *absorption,
+              unsigned int size, unsigned int iterations,
+              i_distribution *distribution, neuralNet* nn) :
+	iterations(iterations)
 {
 	// Create proper factory
 	fireflyFactory factory (stepSize, baseAttraction, absorption,
@@ -11,7 +13,7 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption, unsi
 	// Create adequate objective function
 	objectiveFunction = new neuralWessingerEvaluator(nn);
 
-	double illumination;
+	double evaluationValue;
 
 	// For each supposed firefly in swarm
 	for(unsigned f = 0; f < size; ++f)
@@ -23,17 +25,23 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption, unsi
 		// Initialize it
 		newFirefly->initialize();
 
-		// Set its illumination
-		illumination = objectiveFunction->evaluate(newFirefly->getSolution());
-		newFirefly->setIllumination(illumination);
+		// Evaluate it
+		evaluationValue = objectiveFunction->evaluate(newFirefly->getSolution());
+		newFirefly->setEvaluationValue(evaluationValue);
+
+		// Check if its error is highest so far and update if so
+		if(evaluationValue > highestKnownError)
+			highestKnownError = evaluationValue;
 	}
 
-	/* Find current brightest firefly (worst firefly) and
-	 * remember it's illumination value for normalization
-	 * purposes. */
-	highestKnownError = findBrightestFirefly()->getIllumination();
-
+	// Set proper normalized evaluation (illumination) for whole swarm
 	normalizeSwarm();
+
+	// Initialize and remember current best solution
+	bestFirefly = findBrightestFirefly();
+	bestSolutionHolder = factory.createFirefly();
+	bestSolutionHolder.initialize();
+	bestSolutionHolder.setSolution(bestFirefly->getSolution());
 }
 
 void swarm::normalizeSwarm()
@@ -43,7 +51,7 @@ void swarm::normalizeSwarm()
 	{
 		// Normalize its illumination
 		firefly* fly = &fireflies.at(f);
-		fly->setIllumination(normalize(fly->getIllumination()));
+		fly->setIllumination(normalize(fly->getEvaluationValue()));
 	}
 }
 
@@ -88,12 +96,19 @@ void swarm::findSolution()
 					double newPositionError = objectiveFunction->evaluate(fly_i->getSolution());
 
 					// Update biggest error if newPositionError is bigger
-					if(newPositionError > highestKnownError) highestKnownError = newPositionError;
+					if(newPositionError > highestKnownError)
+					{
+						highestKnownError = newPositionError;
+
+						// Normalize swarm according to new error
+						normalizeSwarm();
+					}
 
 					// Set normalized error as new firefly illumination
 					fly_i->setIllumination(normalize(newPositionError));
 
-					//cout << "Normal move" << endl;
+					bestFirefly = findBrightestFirefly();
+					bestSolutionHolder.setSolution(bestFirefly->getSolution());
 				}
 			}
 
@@ -107,23 +122,28 @@ void swarm::findSolution()
         double newPositionError = objectiveFunction->evaluate(fly_i->getSolution());
 
         // Update biggest error if newPositionError is bigger
-        if(newPositionError > highestKnownError) highestKnownError = newPositionError;
+        if(newPositionError > highestKnownError)
+        {
+	        highestKnownError = newPositionError;
+
+	        // Normalize swarm according to new error
+	        normalizeSwarm();
+        }
 
         // Set normalized error as new firefly illumination
         fly_i->setIllumination(normalize(newPositionError));
 
-				//cout << "Random move" << endl;
+				bestFirefly = findBrightestFirefly();
+				bestSolutionHolder.setSolution(bestFirefly->getSolution());
 			}
 		}
-		//cout << "Iteration " + to_string(iteration) << endl;
 		cout << ".";
 	}
 
 	cout << endl;
 
-	bestFirefly = findBrightestFirefly();
   cout << "Biggest error = " << highestKnownError << endl;
-	cout << "End error = " << objectiveFunction->evaluate(bestFirefly->getSolution()) << endl;
+	cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
 }
 
 firefly* swarm::findBrightestFirefly()

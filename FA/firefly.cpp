@@ -2,6 +2,8 @@
 
 using namespace std;
 
+firefly::firefly() {}
+
 firefly::firefly(i_fireflyStrategy *strategy) :
 strategy(strategy)
 { }
@@ -28,10 +30,25 @@ double firefly::getIllumination()
 	return this->illumination;
 }
 
+void firefly::setEvaluationValue(double value)
+{
+	evaluationValue = value;
+}
+
+double firefly::getEvaluationValue()
+{
+	return evaluationValue;
+}
+
 void* firefly::getSolution()
 {
 	if(hasStrategy()) return strategy->getSolution();
 	else return NULL;
+}
+
+void firefly::setSolution(void *newSolution)
+{
+	strategy->setSolution(newSolution);
 }
 
 std::string firefly::toString()

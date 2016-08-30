@@ -11,6 +11,7 @@ class firefly
 {
 public:
 
+	firefly();
 	firefly(i_fireflyStrategy* strategy);
 
 	void initialize();
@@ -18,7 +19,10 @@ public:
 
 	void setIllumination(double value);
 	double getIllumination();
+	void setEvaluationValue(double value);
+	double getEvaluationValue();
 	void* getSolution();
+	void setSolution(void* newSolution);
 
 	std::string toString();
 	void print();
@@ -26,6 +30,8 @@ public:
 private:
 	/* Usually higher the illumination, better the solution */
 	double illumination;
+
+	double evaluationValue = 0.0;
 
 	i_fireflyStrategy* strategy = NULL;
 

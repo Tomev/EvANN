@@ -8,7 +8,8 @@
 
 class population {
 public:
-	population(unsigned int size, neuralNet* nn, i_distribution* distribution);
+	population(unsigned int size, unsigned int iterations,
+	           neuralNet* nn, i_distribution* distribution);
 
   void findSolution();
 
@@ -37,7 +38,7 @@ protected:
   void selectNewPopulation();
 
   double normalize(double target);
-  void normalizePopulation();
+  void normalizePopulation(vector<individual>* population);
 };
 
 #endif //GENEVANN_POPULATION_H
