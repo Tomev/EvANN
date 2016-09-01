@@ -102,7 +102,9 @@ void neuralNet::getResults(vector<double> *results)
   for(int n = 0; n < net.at(outLayerIdx).size(); ++n)
   {
     // Add output value to container.
-    results->push_back(net.at(outLayerIdx).at(n).input);
+    results->push_back(
+      net.at(outLayerIdx).at(n).getOutput()
+    );
   }
 }
 

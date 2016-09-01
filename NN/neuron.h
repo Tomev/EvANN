@@ -38,6 +38,7 @@ public:
 
 	double getBiasValue();
 	double getIthOutputWeight(unsigned int i);
+	double getOutput();
 
   void fire();
 
