@@ -8,7 +8,7 @@ population::population(unsigned int size, unsigned int iterations,
 iterations(iterations), distribution(distribution)
 {
 	// Add proper objective function
-	objectiveFunction = new neuralWessingerEvaluator(nn);
+	objectiveFunction = new alternativeNeuralWessingersEvaluator(nn);
 
   // Create factory
   factory = new individualsFactory(nn, distribution);

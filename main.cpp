@@ -32,7 +32,7 @@ enum tasksID
   Exit, OriginalWork, GANNWessinger, FANNWessinger
 };
 
-// Update each time enum is
+// Update each time changes in enum are made
 static unsigned int maxInput = 3;
 
 int main()
@@ -68,18 +68,20 @@ int main()
 
 
 	    // BIGLARI
-	    /*
+
 			solution = {
 					{{-1.1552, -0.4596, -1.9932, -1.1452, 0.0}},
 					{{0.2565, -1.8594}, {0.4425, -2.4258}, {0.0024, -1.0052}, {0.5258, -1.5826}}
 			};
-	    */
+
 
 	    // ALTERNATIVE
+      /*
 	    solution = {
 		    {{-1.679, -0.2738, -1.7586, -1.8084, 0.0}},
 		    {{0.1712, -1.4165}, {0.3209, -2.089}, {0.0125, -1.6806}, {0.3579, -1.8684}}
 	    };
+      */
 
 			nn.setWeightsFromNeuronsStructure(&solution);
 			nn.print();
@@ -101,6 +103,8 @@ int main()
 			nn.print();
 
 			evaluator.printTestCases(p->getResult());
+
+      cout << "Evaluation val = " << evaluator.evaluate(p->getResult()) << endl;
 
       // GENETIC ALGORITHM WITH EVALUATION
       break;

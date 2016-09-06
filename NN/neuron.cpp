@@ -65,8 +65,7 @@ double neuron::getIthOutputWeight(unsigned int i)
 
 double neuron::getOutput()
 {
-	cout << "input : " << input << " output : " << activationFunction->getOutput(input) << endl;
-	return activationFunction->getOutput(input);
+	return input;
 }
 
 // TODO: For debugging purposes.

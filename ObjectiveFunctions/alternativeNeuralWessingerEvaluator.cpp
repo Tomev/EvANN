@@ -22,8 +22,8 @@ double alternativeNeuralWessingersEvaluator::evaluate(void *solution)
 	double testCase;
 	unsigned int denominator = 0;
 
-	// For each test case (which are cases form 1.1 to 3.9)
-	for(unsigned int t = 11; t < 40; ++t)
+	// For each test case (which are cases form 1 to 4)
+	for(unsigned int t = 10; t <= 40; ++t)
 	{
 		testCase = t;
 		testCase /= 10;
@@ -56,7 +56,7 @@ void alternativeNeuralWessingersEvaluator::printTestCases(void *solution)
 	double overallError = 0.0;
 
 	vector<neuralFireflyStrategy::layer>* target =
-		static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
+			static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
 
 	// Set neural nets weights
 	nn->setWeightsFromNeuronsStructure(target);
@@ -65,7 +65,7 @@ void alternativeNeuralWessingersEvaluator::printTestCases(void *solution)
 	vector<double> output;
 	double receivedVal, testCase;
 
-	// For each test case (which are cases form 1.1 to 3.9)
+	// For each test case (which are cases form 1 to 4)
 	for(unsigned int t = 10; t <= 40; ++t)
 	{
 		testCase = t;
@@ -107,7 +107,7 @@ double alternativeNeuralWessingersEvaluator::calculateOutputValue(double input, 
 
 	double result = t * pow(trialFunctionValue(t, nnOutput), 2) * pow(trialFunctionDerivativeValue(t, nnOutput), 2);
 	result -= pow(trialFunctionValue(t,nnOutput), 3) * pow(trialFunctionDerivativeValue(t, nnOutput), 2);
-	result += t * (t * t + 1) * trialFunctionDerivativeValue(t, nnOutput);
+	result += t * (t * t + 1.f) * trialFunctionDerivativeValue(t, nnOutput);
 	result -= t * t * trialFunctionValue(t, nnOutput);
 
 	return result;
@@ -116,16 +116,17 @@ double alternativeNeuralWessingersEvaluator::calculateOutputValue(double input, 
 double alternativeNeuralWessingersEvaluator::trialFunctionValue(double t, double nnOutput)
 {
 	// BIGLARI version
-	/*
-	double result = 1/6 * (t-1) * sqrt(66);
-	result -= 1/6 * (t-4) * sqrt(6);
-	result += (t-1) * (t-4) * nnOutput;
-	*/
+
+	double result = (1.f / 6.f) * (t - 1.f) * sqrt(66.f);
+	result -= (1.f / 6.f) * (t-4.f) * sqrt(6.f);
+	result += (t - 1.f) * (t - 4.f) * nnOutput;
 
 	// http://www.waset.org/publications/2312
+	/*
 	double result = sqrt(5/3) * t;
 	result += sqrt(19/6);
 	result += (t - 1) * (t - 4) * nnOutput;
+	*/
 
 	return result;
 }
@@ -133,18 +134,20 @@ double alternativeNeuralWessingersEvaluator::trialFunctionValue(double t, double
 double alternativeNeuralWessingersEvaluator::trialFunctionDerivativeValue(double t, double nnOutput)
 {
 	// Biglari version
-	/*
-	double result = sqrt(66) / 6;
-	result -= sqrt(6) / 6;
-	*/
-	// http://www.waset.org/publications/2312
-	double result = sqrt(5/3);
 
-	result += 4 * trialFunctionNNPartDerivativeValue(t);
+	double result = (sqrt(66.f) / 6.f);
+	result -= (sqrt(6.f) / 6.f);
+
+	// http://www.waset.org/publications/2312
+	/*
+	double result = sqrt(5/3);
+  */
+
+	result += 4.f * trialFunctionNNPartDerivativeValue(t);
 	result += t * t * trialFunctionNNPartDerivativeValue(t);
-	result += 2 * t * nnOutput;
-	result -= 5 * nnOutput;
-	result -= 5 * t * trialFunctionNNPartDerivativeValue(t);
+	result += 2.f * t * nnOutput;
+	result -= 5.f * nnOutput;
+	result -= 5.f * t * trialFunctionNNPartDerivativeValue(t);
 
 	return result;
 }
@@ -157,9 +160,9 @@ double alternativeNeuralWessingersEvaluator::trialFunctionNNPartDerivativeValue(
 
 	for(unsigned int i = 0; i < nn->getTopology()->at(1); ++i)
 	{
-		component = - pow((1 / (1 + exp(-( nn->getNeuronsIthOutputWeight(1, i, 0)) * t + nn->getNeuronsBias(1, i) ))), 2);
+		component = - pow((1.f / (1 + exp(-( nn->getNeuronsIthOutputWeight(1, i, 0)) * t + nn->getNeuronsBias(1, i) ))), 2);
 
-		component += (1 / (1 + exp(-( nn->getNeuronsIthOutputWeight(1, i, 0) * t + nn->getNeuronsBias(1, i)))));
+		component += (1.f / (1 + exp(-( nn->getNeuronsIthOutputWeight(1, i, 0) * t + nn->getNeuronsBias(1, i)))));
 
 		component *= nn->getNeuronsIthOutputWeight(1, i, 0) * nn->getNeuronsIthOutputWeight(0, 0, i);
 
