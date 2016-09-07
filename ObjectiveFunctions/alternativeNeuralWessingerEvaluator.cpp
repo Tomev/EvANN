@@ -115,13 +115,13 @@ double alternativeNeuralWessingersEvaluator::calculateOutputValue(double input, 
 
 double alternativeNeuralWessingersEvaluator::trialFunctionValue(double t, double nnOutput)
 {
-	// BIGLARI version
+	// Biglari
 
-	double result = (1.f / 6.f) * (t - 1.f) * sqrt(66.f);
-	result -= (1.f / 6.f) * (t-4.f) * sqrt(6.f);
+	double result = (sqrt(66.f) / 6.f) * (t - 1.f);
+	result -= (sqrt(6.f) / 6.f) * (t-4.f);
 	result += (t - 1.f) * (t - 4.f) * nnOutput;
 
-	// http://www.waset.org/publications/2312
+	// Ghalambaz
 	/*
 	double result = sqrt(5/3) * t;
 	result += sqrt(19/6);
@@ -133,21 +133,17 @@ double alternativeNeuralWessingersEvaluator::trialFunctionValue(double t, double
 
 double alternativeNeuralWessingersEvaluator::trialFunctionDerivativeValue(double t, double nnOutput)
 {
-	// Biglari version
+	// Biglari
 
-	double result = (sqrt(66.f) / 6.f);
-	result -= (sqrt(6.f) / 6.f);
+	double result = (sqrt(66.f) - sqrt(6.f)) / 6.f;
 
-	// http://www.waset.org/publications/2312
+	// Ghalambaz
 	/*
-	double result = sqrt(5/3);
+	double result = sqrt(5.f / 3.f);
   */
 
-	result += 4.f * trialFunctionNNPartDerivativeValue(t);
-	result += t * t * trialFunctionNNPartDerivativeValue(t);
-	result += 2.f * t * nnOutput;
-	result -= 5.f * nnOutput;
-	result -= 5.f * t * trialFunctionNNPartDerivativeValue(t);
+	result += (t * t -5.f * t + 4.f) * trialFunctionNNPartDerivativeValue(t);
+	result += (2.f * t - 5.f * t) * nnOutput;
 
 	return result;
 }
