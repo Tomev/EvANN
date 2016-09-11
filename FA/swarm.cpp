@@ -137,7 +137,7 @@ void swarm::findSolution()
 				bestSolutionHolder.setSolution(bestFirefly->getSolution());
 			}
 		}
-		cout << ".";
+		if(iteration % 100 == 0) cout << ".";
 	}
 
 	cout << endl;

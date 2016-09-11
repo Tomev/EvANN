@@ -20,7 +20,7 @@ static double stepSize = 0.01;
 static double baseAttraction = 1;
 static double absorption = 1.0;
 static unsigned int swarmSize = 50;
-static unsigned int iterations = 10000;
+static unsigned int iterations = 5000;
 static unsigned int taskID = 0;
 
 static vector<neuralFireflyStrategy::layer> solution;
@@ -34,16 +34,6 @@ enum tasksID
 
 // Update each time changes in enum are made
 static unsigned int maxInput = 3;
-
-double y(double t)
-{
-  return (sqrt(t * t + 0.5));
-}
-
-double yPrime(double t)
-{
-  return (t / sqrt (t * t + 0.5));
-}
 
 int main()
 {
@@ -59,8 +49,8 @@ int main()
   cout << "Select task to perform: " << endl;
   cout << "0) exit," << endl;
   cout << "1) check results from original work," << endl;
-  cout << "2) train NN using GA to solve Wessingers equation," << endl;
-  cout << "3) train NN using FA to solve Wessingers equation." << endl;
+  cout << "2) train NN using GA to solve Wessinger's equation," << endl;
+  cout << "3) train NN using FA to solve Wessinger's equation." << endl;
   cout << "> ";
   cin >> taskID;
 
@@ -76,22 +66,10 @@ int main()
     case OriginalWork:
       // NEURAL NET TEST WITH FIXED PARAMETERS WITH EVALUATION
 
-
-	    // BIGLARI
-
 			solution = {
-					{{-1.1552, -0.4596, -1.9932, -1.1452, 0.0}},
-					{{0.2565, -1.8594}, {0.4425, -2.4258}, {0.0024, -1.0052}, {0.5258, -1.5826}}
+					{{-1.552, -0.4596, -1.9932, -1.1452, 0.0}},
+					{{0.2565, -1.8594}, {0.4425, -2.4258}, {0.0024, -1.0052}, {0.5258, -1.5866}}
 			};
-
-
-	    // ALTERNATIVE
-      /*
-	    solution = {
-		    {{-1.679, -0.2738, -1.7586, -1.8084, 0.0}},
-		    {{0.1712, -1.4165}, {0.3209, -2.089}, {0.0125, -1.6806}, {0.3579, -1.8684}}
-	    };
-      */
 
 			nn.setWeightsFromNeuronsStructure(&solution);
 			nn.print();

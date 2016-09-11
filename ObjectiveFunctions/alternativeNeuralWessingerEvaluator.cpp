@@ -85,9 +85,6 @@ void alternativeNeuralWessingersEvaluator::printTestCases(void *solution)
 
 		cout << "Expected trial = " << sqrt(testCase * testCase + 0.5);
 		cout << " Actual Trial = " << trialFunctionValue(testCase, output.at(0)) << endl;
-		cout << "Trial derivative: " << trialFunctionDerivativeValue(testCase, output.at(0)) << endl;
-		cout << "Expected derivative: " << testCase / sqrt(testCase + 0.5) << endl;
-    cout << "NNOut: " << output.at(0) << endl;
 
 		overallError += pow((receivedVal), 2);
 
@@ -118,37 +115,20 @@ double alternativeNeuralWessingersEvaluator::calculateOutputValue(double input, 
 
 double alternativeNeuralWessingersEvaluator::trialFunctionValue(double t, double nnOutput)
 {
-	// Biglari
-
 	double result = (sqrt(66.f) / 6.f) * (t - 1.f);
 	result -= (sqrt(6.f) / 6.f) * (t-4.f);
 	result += (t - 1.f) * (t - 4.f) * nnOutput;
-
-	// Ghalambaz
-	/*
-	double result = sqrt(5/3) * t;
-	result += sqrt(19/6);
-	result += (t - 1) * (t - 4) * nnOutput;
-	*/
 
 	return result;
 }
 
 double alternativeNeuralWessingersEvaluator::trialFunctionDerivativeValue(double t, double nnOutput)
 {
-	//return (t / sqrt(t * t + 0.5));
-
-	// Biglari
-
 	double result = (sqrt(66.f) - sqrt(6.f)) / 6.f;
 
-	// Ghalambaz
-	/*
-	double result = sqrt(5.f / 3.f);
-  */
+	result += (t * t - 5.f * t + 4.f) * trialFunctionNNPartDerivativeValue(t);
 
-	result += (t * t -5.f * t + 4.f) * trialFunctionNNPartDerivativeValue(t);
-	result += (2.f * t - 5.f * t) * nnOutput;
+	result += (2.f * t - 5.f) * nnOutput;
 
 	return result;
 }
@@ -157,13 +137,16 @@ double alternativeNeuralWessingersEvaluator::trialFunctionDerivativeValue(double
 double alternativeNeuralWessingersEvaluator::trialFunctionNNPartDerivativeValue(double t)
 {
 	double result = 0.0;
-	double component;
+	double component, element, powerElement;
 
 	for(unsigned int i = 0; i < nn->getTopology()->at(1); ++i)
 	{
-		component = - pow((1.f / (1.f + exp(-( nn->getNeuronsIthOutputWeight(1, i, 0)) * t + nn->getNeuronsBias(1, i) ))), 2);
+		powerElement = -((nn->getNeuronsIthOutputWeight(0, 0, i)) * t  + nn->getNeuronsBias(1, i));
+		element = 1.f / (1.f + exp (powerElement));
 
-		component += (1.f / (1.f + exp(-( nn->getNeuronsIthOutputWeight(1, i, 0) * t + nn->getNeuronsBias(1, i)))));
+		component = - pow(element, 2);
+
+		component += element;
 
 		component *= nn->getNeuronsIthOutputWeight(1, i, 0) * nn->getNeuronsIthOutputWeight(0, 0, i);
 
