@@ -68,7 +68,7 @@ void neuralNet::feedForward()
     for(int n = 0; n < net.at(l).size(); ++n)
     {
       // Fire each neuron
-      net.at(l).at(n).fire();
+      net.at(l).at(n).fire(l == 0);
     }
   }
 }

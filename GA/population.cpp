@@ -71,8 +71,8 @@ void population::findSolution()
     // Select next population from individuals of both populations
     selectNewPopulation();
 
-    // Show that application is working by printing "." after each iteration.
-		cout << ".";
+    // Show that application is working by printing "." after 100 iterations.
+    if(iteration % 100 == 0)	cout << ".";
 	}
 
 	cout << endl;

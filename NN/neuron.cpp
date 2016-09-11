@@ -44,9 +44,10 @@ void neuron::resetInputValue()
   input = bias;
 }
 
-void neuron::fire()
+void neuron::fire(bool isInputLayer)
 {
-	double baseOutput = activationFunction->getOutput(input);
+
+	double baseOutput = isInputLayer ? input : activationFunction->getOutput(input);
 
 	// For each output
 	for(int o = 0; o < outputs.size(); ++o)

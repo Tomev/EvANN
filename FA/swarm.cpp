@@ -11,7 +11,7 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption,
 	                        distribution, nn->getTopology());
 
 	// Create adequate objective function
-	objectiveFunction = new neuralWessingerEvaluator(nn);
+	objectiveFunction = new alternativeNeuralWessingersEvaluator(nn);
 
 	double evaluationValue;
 

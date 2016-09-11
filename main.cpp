@@ -35,6 +35,16 @@ enum tasksID
 // Update each time changes in enum are made
 static unsigned int maxInput = 3;
 
+double y(double t)
+{
+  return (sqrt(t * t + 0.5));
+}
+
+double yPrime(double t)
+{
+  return (t / sqrt (t * t + 0.5));
+}
+
 int main()
 {
   /* Setup */
@@ -51,13 +61,13 @@ int main()
   cout << "1) check results from original work," << endl;
   cout << "2) train NN using GA to solve Wessingers equation," << endl;
   cout << "3) train NN using FA to solve Wessingers equation." << endl;
-  cout << "> " << endl;
+  cout << "> ";
   cin >> taskID;
 
   while(cin.fail() || taskID > maxInput)
   {
     cout << "Incorrect input. Please enter correct one." << endl;
-    cout << "> " << endl;
+    cout << "> ";
     cin >> taskID;
   }
 

@@ -40,7 +40,7 @@ public:
 	double getIthOutputWeight(unsigned int i);
 	double getOutput();
 
-  void fire();
+  void fire(bool isInputLayer);
 
   string toString();
   void print();
