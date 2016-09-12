@@ -95,20 +95,29 @@ void swarm::findSolution()
 					// Evaluate new solution
 					double newPositionError = objectiveFunction->evaluate(fly_i->getSolution());
 
+					fly_i->setEvaluationValue(newPositionError);
+
 					// Update biggest error if newPositionError is bigger
 					if(newPositionError > highestKnownError)
 					{
 						highestKnownError = newPositionError;
-
-						// Normalize swarm according to new error
-						normalizeSwarm();
 					}
 
 					// Set normalized error as new firefly illumination
 					fly_i->setIllumination(normalize(newPositionError));
 
+					// Normalize swarm according to new error
+					normalizeSwarm();
+
+					// Compare this iteration best with overall best
 					bestFirefly = findBrightestFirefly();
-					bestSolutionHolder.setSolution(bestFirefly->getSolution());
+
+					if(bestFirefly->getIllumination() > bestSolutionHolder.getIllumination() )
+					{
+						bestSolutionHolder.setSolution(bestFirefly->getSolution());
+						bestSolutionHolder.setEvaluationValue(bestFirefly->getEvaluationValue());
+						bestSolutionHolder.setIllumination(bestFirefly->getIllumination());
+					}
 				}
 			}
 
@@ -133,8 +142,15 @@ void swarm::findSolution()
         // Set normalized error as new firefly illumination
         fly_i->setIllumination(normalize(newPositionError));
 
+				// Compare this iteration best with overall best
 				bestFirefly = findBrightestFirefly();
-				bestSolutionHolder.setSolution(bestFirefly->getSolution());
+
+				if(bestFirefly->getIllumination() > bestSolutionHolder.getIllumination() )
+				{
+					bestSolutionHolder.setSolution(bestFirefly->getSolution());
+					bestSolutionHolder.setEvaluationValue(bestFirefly->getEvaluationValue());
+					bestSolutionHolder.setIllumination(bestFirefly->getIllumination());
+				}
 			}
 		}
 		if(iteration % 100 == 0) cout << ".";
@@ -164,7 +180,7 @@ firefly* swarm::findBrightestFirefly()
 
 void* swarm::getResult()
 {
-	return bestFirefly->getSolution();
+	return bestSolutionHolder.getSolution();
 }
 
 

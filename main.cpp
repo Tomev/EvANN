@@ -20,7 +20,7 @@ static double stepSize = 0.01;
 static double baseAttraction = 1;
 static double absorption = 1.0;
 static unsigned int swarmSize = 50;
-static unsigned int iterations = 5000;
+static unsigned int iterations = 1000;
 static unsigned int taskID = 0;
 
 static vector<neuralFireflyStrategy::layer> solution;
@@ -49,7 +49,7 @@ int main()
   cout << "Select task to perform: " << endl;
   cout << "0) exit," << endl;
   cout << "1) check results from original work," << endl;
-  cout << "2) train NN using GA to solve Wessinger's equation," << endl;
+  cout << "2) train NN using EA to solve Wessinger's equation," << endl;
   cout << "3) train NN using FA to solve Wessinger's equation." << endl;
   cout << "> ";
   cin >> taskID;
