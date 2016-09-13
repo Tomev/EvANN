@@ -72,7 +72,7 @@ void population::findSolution()
     selectNewPopulation();
 
     // Show that application is working by printing "." after 100 iterations.
-    if(fmod(iteration, iterations/10) == 0)	cout << countAverageFitness() << endl;
+    if(fmod(iteration, iterations/10) == 0)	cout << countFitnessSum() << endl;
 	}
 
 	cout << endl;
@@ -253,7 +253,7 @@ void population::findBestIndividual()
 	}
 }
 
-double population::countAverageFitness()
+double population::countFitnessSum()
 {
   double sum = 0.0;
 
@@ -262,15 +262,13 @@ double population::countAverageFitness()
     sum += individuals.at(i).getFitnessValue();
   }
 
-  sum /= individuals.size();
-
   return sum;
 }
 
 double population::countVariation()
 {
   double variation = 0.0;
-  double average = countAverageFitness();
+  double average = countFitnessSum() / individuals.size();;
 
   for(unsigned int i = 0; i < individuals.size(); ++i)
   {

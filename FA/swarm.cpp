@@ -95,7 +95,7 @@ void swarm::findSolution()
 			// Move firefly in random direction if it didn't move
 			if(!hasMoved) moveFFAndUpdateSwarmData(fly_i, NULL);
 		}
-		if(fmod(iteration, iterations / 10) == 0) cout << countAverageFitness() << endl;
+		if(fmod(iteration, iterations / 10) == 0) cout << countFitnessSum() << endl;
 	}
 
 	cout << endl;
@@ -167,7 +167,7 @@ void swarm::moveFFAndUpdateSwarmData(firefly* ff, firefly* target)
   }
 }
 
-double swarm::countAverageFitness()
+double swarm::countFitnessSum()
 {
   double sum = 0.0;
 
@@ -178,15 +178,13 @@ double swarm::countAverageFitness()
     sum += fireflies.at(f).getIllumination();
   }
 
-  sum /= fireflies.size();
-
   return sum;
 }
 
 double swarm::countVariation()
 {
   double variation = 0.0;
-  double average = countAverageFitness();
+  double average = countFitnessSum() / fireflies.size();;
 
   // For each firefly
   for(unsigned int f = 0; f < fireflies.size(); ++f)

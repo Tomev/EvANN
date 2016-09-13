@@ -40,7 +40,7 @@ protected:
   double normalize(double target);
   void normalizePopulation(vector<individual>* population);
 
-	double countAverageFitness();
+	double countFitnessSum();
 	double countVariation();
 	double countStandardDerivative();
 };
