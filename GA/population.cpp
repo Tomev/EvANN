@@ -53,7 +53,7 @@ void population::findSolution()
 	findBestIndividual();
 	cout << "Start error = " << objectiveFunction->evaluate(bestIndividual->getSolution()) << endl;
 	cout << "Biggest error = " << highestKnownError << endl;
-  cout << "Best individual fitness = " << bestIndividual->getFitnessValue() << endl;
+  cout << "Standard derivative = " << countStandardDerivative() << endl;
 	// END DEBUG
 
 	// For each iteration
@@ -72,7 +72,7 @@ void population::findSolution()
     selectNewPopulation();
 
     // Show that application is working by printing "." after 100 iterations.
-    if(iteration % 100 == 0)	cout << ".";
+    if(fmod(iteration, iterations/10) == 0)	cout << countAverageFitness() << endl;
 	}
 
 	cout << endl;
@@ -83,7 +83,7 @@ void population::findSolution()
 	// DEBUG
 	cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
 	cout << "Biggest error = " << highestKnownError << endl;
-  cout << "Best individual fitness = " << bestIndividual->getFitnessValue() << endl;
+  cout << "Standard derivative = " << countStandardDerivative() << endl;
 	// END DEBUG
 }
 
@@ -251,4 +251,38 @@ void population::findBestIndividual()
 		bestIndividual = (individuals.at(i).getFitnessValue() > bestIndividual->getFitnessValue()) ?
 											&individuals.at(i) : bestIndividual;
 	}
+}
+
+double population::countAverageFitness()
+{
+  double sum = 0.0;
+
+  for(unsigned int i = 0; i < individuals.size(); ++i)
+  {
+    sum += individuals.at(i).getFitnessValue();
+  }
+
+  sum /= individuals.size();
+
+  return sum;
+}
+
+double population::countVariation()
+{
+  double variation = 0.0;
+  double average = countAverageFitness();
+
+  for(unsigned int i = 0; i < individuals.size(); ++i)
+  {
+    variation += pow(individuals.at(i).getFitnessValue() - average ,2);
+  }
+
+  variation /= individuals.size();
+
+  return variation;
+}
+
+double population::countStandardDerivative()
+{
+  return sqrt(countVariation());
 }

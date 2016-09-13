@@ -39,6 +39,10 @@ protected:
 
   double normalize(double target);
   void normalizePopulation(vector<individual>* population);
+
+	double countAverageFitness();
+	double countVariation();
+	double countStandardDerivative();
 };
 
 #endif //GENEVANN_POPULATION_H

@@ -35,6 +35,10 @@ private:
   double normalize(double value);
   void normalizeSwarm();
 
+	double countAverageFitness();
+	double countVariation();
+	double countStandardDerivative();
+
 };
 
 

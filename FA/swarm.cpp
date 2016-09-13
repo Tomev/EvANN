@@ -67,6 +67,7 @@ void swarm::findSolution()
 	bestFirefly = findBrightestFirefly();
 	cout << "Start error = " << objectiveFunction->evaluate(bestFirefly->getSolution()) << endl;
   cout << "Biggest error = " << highestKnownError << endl;
+  cout << "Standard derivative = " << countStandardDerivative() << endl;
 	// END DEBUG
 
 	// For each iteration
@@ -94,13 +95,14 @@ void swarm::findSolution()
 			// Move firefly in random direction if it didn't move
 			if(!hasMoved) moveFFAndUpdateSwarmData(fly_i, NULL);
 		}
-		if(iteration % 100 == 0) cout << ".";
+		if(fmod(iteration, iterations / 10) == 0) cout << countAverageFitness() << endl;
 	}
 
 	cout << endl;
 
   cout << "Biggest error = " << highestKnownError << endl;
 	cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
+  cout << "Standard derivative = " << countStandardDerivative() << endl;
 }
 
 firefly* swarm::findBrightestFirefly()
@@ -163,4 +165,42 @@ void swarm::moveFFAndUpdateSwarmData(firefly* ff, firefly* target)
       updateBestSolutionHolder(bestFirefly);
     }
   }
+}
+
+double swarm::countAverageFitness()
+{
+  double sum = 0.0;
+
+  // For each firefly
+  for(unsigned int f = 0; f < fireflies.size(); ++f)
+  {
+    // Add it's fitness to sum
+    sum += fireflies.at(f).getIllumination();
+  }
+
+  sum /= fireflies.size();
+
+  return sum;
+}
+
+double swarm::countVariation()
+{
+  double variation = 0.0;
+  double average = countAverageFitness();
+
+  // For each firefly
+  for(unsigned int f = 0; f < fireflies.size(); ++f)
+  {
+    // Add element basing on it's fitness to variation
+    variation += pow(fireflies.at(f).getIllumination() - average ,2);
+  }
+
+  variation /= fireflies.size();
+
+  return variation;
+}
+
+double swarm::countStandardDerivative()
+{
+  return sqrt(countVariation());
 }

@@ -18,8 +18,8 @@ static alternativeNeuralWessingersEvaluator evaluator(&nn);
 static double stepSize = 0.01;
 static double baseAttraction = 1;
 static double absorption = 1.0;
-static unsigned int swarmSize = 70;
-static unsigned int iterations = 700;
+static unsigned int swarmSize = 40;
+static unsigned int iterations = 10000;
 static unsigned int taskID = 0;
 
 static vector<neuralFireflyStrategy::layer> solution;
