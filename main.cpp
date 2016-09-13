@@ -1,9 +1,8 @@
 #include <iostream>
+#include <ctime>
 
 #include "FA/swarm.h"
 #include "GA/population.h"
-
-#include "time.h"
 
 
 using namespace std;
@@ -19,8 +18,8 @@ static alternativeNeuralWessingersEvaluator evaluator(&nn);
 static double stepSize = 0.01;
 static double baseAttraction = 1;
 static double absorption = 1.0;
-static unsigned int swarmSize = 50;
-static unsigned int iterations = 1000;
+static unsigned int swarmSize = 70;
+static unsigned int iterations = 700;
 static unsigned int taskID = 0;
 
 static vector<neuralFireflyStrategy::layer> solution;
@@ -41,6 +40,7 @@ int main()
 
   // Set random seed for proper functioning of randomizers.
   srand(time(NULL));
+  clock_t start;
 
   /* Setup finished */
 
@@ -83,6 +83,9 @@ int main()
     case GANNWessinger:
       // GENERIC ALGORITHM WITH EVALUATION
 
+      // Start timer
+      start = clock();
+
 			p = new population(swarmSize, iterations, &nn, &distribution);
 
 			p->findSolution();
@@ -92,12 +95,16 @@ int main()
 
 			evaluator.printTestCases(p->getResult());
 
-      cout << "Evaluation val = " << evaluator.evaluate(p->getResult()) << endl;
+      // Get time
+      cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
 
       // GENETIC ALGORITHM WITH EVALUATION
       break;
     case FANNWessinger:
       // FIREFLY ALGORITHM WITH EVALUATION
+
+      // Start timer
+      start = clock();
 
 			s = new swarm(&stepSize, &baseAttraction, &absorption, swarmSize,
 										iterations, &distribution, &nn);
@@ -108,6 +115,9 @@ int main()
 			nn.print();
 
 			evaluator.printTestCases(s->getResult());
+
+      // Get time
+      cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
 
       // FIREFLY ALGORITHM WITH EVALUATION
       break;

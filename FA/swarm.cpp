@@ -41,7 +41,7 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption,
 	bestFirefly = findBrightestFirefly();
 	bestSolutionHolder = factory.createFirefly();
 	bestSolutionHolder.initialize();
-	bestSolutionHolder.setSolution(bestFirefly->getSolution());
+	updateBestSolutionHolder(bestFirefly);
 }
 
 void swarm::normalizeSwarm()
@@ -60,9 +60,6 @@ double swarm::normalize(double value)
 	if(highestKnownError > 0) return 1 - value / highestKnownError;
 	else return 1;
 }
-
-// TODO when moving firefly add method to do all the moving logic
-// eg. move ff, update its fitness, check for highestKnownError...
 
 void swarm::findSolution()
 {
@@ -87,71 +84,15 @@ void swarm::findSolution()
 
 				// If fly_j shines brighter
 				if(fly_j->getIllumination() > fly_i->getIllumination())
-				{
-					// Move firefly i towards firefly j
-					fly_i->flyTowards(fly_j->getSolution());
-					hasMoved = true;
-
-					// Evaluate new solution
-					double newPositionError = objectiveFunction->evaluate(fly_i->getSolution());
-
-					fly_i->setEvaluationValue(newPositionError);
-
-					// Update biggest error if newPositionError is bigger
-					if(newPositionError > highestKnownError)
-					{
-						highestKnownError = newPositionError;
-					}
-
-					// Set normalized error as new firefly illumination
-					fly_i->setIllumination(normalize(newPositionError));
-
-					// Normalize swarm according to new error
-					normalizeSwarm();
-
-					// Compare this iteration best with overall best
-					bestFirefly = findBrightestFirefly();
-
-					if(bestFirefly->getIllumination() > bestSolutionHolder.getIllumination() )
-					{
-						bestSolutionHolder.setSolution(bestFirefly->getSolution());
-						bestSolutionHolder.setEvaluationValue(bestFirefly->getEvaluationValue());
-						bestSolutionHolder.setIllumination(bestFirefly->getIllumination());
-					}
-				}
+        {
+          // Move firefly if update necessary swarm data
+          hasMoved = true;
+          moveFFAndUpdateSwarmData(fly_i, fly_j);
+        }
 			}
 
 			// Move firefly in random direction if it didn't move
-			if(!hasMoved)
-			{
-				// TODO Find out why doesn't it work
-				fly_i->flyTowards(NULL);
-
-        // Evaluate new solution
-        double newPositionError = objectiveFunction->evaluate(fly_i->getSolution());
-
-        // Update biggest error if newPositionError is bigger
-        if(newPositionError > highestKnownError)
-        {
-	        highestKnownError = newPositionError;
-
-	        // Normalize swarm according to new error
-	        normalizeSwarm();
-        }
-
-        // Set normalized error as new firefly illumination
-        fly_i->setIllumination(normalize(newPositionError));
-
-				// Compare this iteration best with overall best
-				bestFirefly = findBrightestFirefly();
-
-				if(bestFirefly->getIllumination() > bestSolutionHolder.getIllumination() )
-				{
-					bestSolutionHolder.setSolution(bestFirefly->getSolution());
-					bestSolutionHolder.setEvaluationValue(bestFirefly->getEvaluationValue());
-					bestSolutionHolder.setIllumination(bestFirefly->getIllumination());
-				}
-			}
+			if(!hasMoved) moveFFAndUpdateSwarmData(fly_i, NULL);
 		}
 		if(iteration % 100 == 0) cout << ".";
 	}
@@ -183,7 +124,43 @@ void* swarm::getResult()
 	return bestSolutionHolder.getSolution();
 }
 
+void swarm::updateBestSolutionHolder(firefly* ff)
+{
+	bestSolutionHolder.setSolution(ff->getSolution());
+	bestSolutionHolder.setEvaluationValue(ff->getEvaluationValue());
+  bestSolutionHolder.setIllumination(ff->getIllumination());
+}
 
+void swarm::moveFFAndUpdateSwarmData(firefly* ff, firefly* target)
+{
+  // Move firefly
+  if(target == NULL) ff->flyTowards(target);
+  else ff->flyTowards(target->getSolution());
 
+  // Evaluate new position of ff
+  ff->setEvaluationValue(objectiveFunction->evaluate(ff->getSolution()));
+  ff->setIllumination(normalize(ff->getEvaluationValue()));
 
+  // Update biggest error if newPositionError is bigger
+  if(ff->getEvaluationValue() > highestKnownError)
+  {
+    highestKnownError = ff->getEvaluationValue();
 
+    // Normalize swarm according to new error
+    normalizeSwarm();
+  }
+
+  // Compare moved firefly with current best
+  if(ff->getIllumination() > bestFirefly->getIllumination())
+  {
+    // If it's better remember it
+    bestFirefly = ff;
+
+    // Check if it's better than current overall best
+    if(bestFirefly->getIllumination() > bestSolutionHolder.getIllumination() )
+    {
+      // Update best if so
+      updateBestSolutionHolder(bestFirefly);
+    }
+  }
+}

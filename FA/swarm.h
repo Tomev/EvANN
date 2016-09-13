@@ -28,6 +28,8 @@ private:
 	i_objectiveFunction* objectiveFunction = NULL;
 
 	firefly bestSolutionHolder;
+	void updateBestSolutionHolder(firefly* ff);
+  void moveFFAndUpdateSwarmData(firefly* ff, firefly* target);
 
   firefly* findBrightestFirefly();
   double normalize(double value);
