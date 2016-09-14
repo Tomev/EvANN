@@ -139,8 +139,8 @@ void neuralNet::setWeightsFromNeuronsStructure(const vector<neuralFireflyStrateg
 string neuralNet::toString()
 {
   string result = "";
-  // For each layer.
-  for(int l = 0; l < net.size(); ++l)
+  // For each non-output layer
+  for(int l = 0; l < net.size()-1; ++l)
   {
     // Add layer information to the result;
     result += "Layer " + to_string(l) + ":\n";

@@ -16,10 +16,10 @@ static neuralNet nn(&topology);
 static alternativeNeuralWessingersEvaluator evaluator(&nn);
 
 static double stepSize = 0.01;
-static double baseAttraction = 1;
+static double baseAttraction = 0.5;
 static double absorption = 1.0;
-static unsigned int swarmSize = 40;
-static unsigned int iterations = 10000;
+static unsigned int swarmSize = 50;
+static unsigned int iterations = 700;
 static unsigned int taskID = 0;
 
 static vector<neuralFireflyStrategy::layer> solution;
@@ -52,7 +52,10 @@ int main()
   cout << "2) train NN using EA to solve Wessinger's equation," << endl;
   cout << "3) train NN using FA to solve Wessinger's equation." << endl;
   cout << "> ";
+
+
   cin >> taskID;
+
 
   while(cin.fail() || taskID > maxInput)
   {
