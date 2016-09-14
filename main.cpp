@@ -41,6 +41,7 @@ int main()
   // Set random seed for proper functioning of randomizers.
   srand(time(NULL));
   clock_t start;
+  string PAUSE;
 
   /* Setup finished */
 
@@ -129,6 +130,10 @@ int main()
     default:
       return EXIT_SUCCESS;
   }
+
+  // Pause before exit
+  cout << endl << "Press enter to exit..." << endl;
+  cin >> PAUSE;
 
   return EXIT_SUCCESS;
 }
