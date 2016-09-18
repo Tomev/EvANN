@@ -87,6 +87,15 @@ int main()
     case GANNWessinger:
       // GENERIC ALGORITHM WITH EVALUATION
 
+      // Set attributes
+      // TR TODO: Add validations
+
+      cout << "Enter population size:" << endl << ">";
+      cin >> swarmSize;
+
+      cout << "Enter iterations number:" << endl << ">";
+      cin >> iterations;
+
       // Start timer
       start = clock();
 
@@ -107,8 +116,26 @@ int main()
     case FANNWessinger:
       // FIREFLY ALGORITHM WITH EVALUATION
 
+      // TR TODO: Add validations
+
+      cout << "Enter population size:" << endl << ">";
+      cin >> swarmSize;
+
+      cout << "Enter iterations number:" << endl << ">";
+      cin >> iterations;
+
+      cout << "Enter step size:" << endl << ">";
+      cin >> stepSize;
+
+      cout << "Enter base attraction:" << endl << ">";
+      cin >> baseAttraction;
+
+      cout << "Enter absorption:" << endl << ">";
+      cin >> baseAttraction;
+
       // Start timer
       start = clock();
+
 
 			s = new swarm(&stepSize, &baseAttraction, &absorption, swarmSize,
 										iterations, &distribution, &nn);
@@ -132,8 +159,7 @@ int main()
   }
 
   // Pause before exit
-  cout << endl << "Press enter to exit..." << endl;
-  cin >> PAUSE;
-
+  cout << endl;
+  system("pause");
   return EXIT_SUCCESS;
 }
