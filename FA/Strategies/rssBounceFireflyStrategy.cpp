@@ -173,15 +173,16 @@ void RSSBounceFireflyStrategy::addSolutionToThisSolution(void *otherSolution)
 // In strategies with RSS this should be called before assigning weight
 double RSSBounceFireflyStrategy::reduceToBounds(double val)
 {
-  double reducedValue = 0.0;
+  double reducedValue = val;
 
-  if (val < _lowerBound){
-    reducedValue = _lowerBound - (val - _lowerBound);
+  while(reducedValue > _upperBound || reducedValue < _lowerBound){
+    if (val < _lowerBound){
+      reducedValue = _lowerBound - (reducedValue - _lowerBound);
+    }
+    else if (reducedValue > _upperBound){
+      reducedValue = _upperBound - (reducedValue - _upperBound);
+    }
   }
-  else if (val > _upperBound){
-    reducedValue = _upperBound - (val - _upperBound);
-  }
-  else reducedValue = val;
 
   //cout << "Reduced val: " << reducedValue << endl;
 

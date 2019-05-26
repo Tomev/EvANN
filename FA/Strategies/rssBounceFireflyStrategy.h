@@ -30,7 +30,7 @@ class RSSBounceFireflyStrategy : public neuralFireflyStrategy
     void subtractThisSolutionFromGivenSolution(void* otherSolution, void* target) override;
     void addSolutionToThisSolution(void* otherSolution) override;
     void multiplySolution(void* target, double coefficient) override;
-    double reduceToBounds(double val);
+    virtual double reduceToBounds(double val);
 
     double _lowerBound = -5;
     double _upperBound = 5;
