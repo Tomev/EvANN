@@ -57,7 +57,9 @@ int main()
   cout << "> ";
 
 
-  cin >> taskID;
+  //cin >> taskID;
+
+  taskID = 5;
 
 
   while(cin.fail() || taskID > maxInput)
@@ -105,20 +107,26 @@ int main()
         iterations = 7000;
       }
 
-      // Start timer
-      start = clock();
+      for(int ii = 0; ii < 31; ++ii) {
 
-			p = new population(swarmSize, iterations, &nn, &distribution);
+        cout << "iteration " << ii << endl;
+        // Start timer
+        start = clock();
 
-			p->findSolution();
+        p = new population(swarmSize, iterations, &nn, &distribution);
 
-			nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)p->getResult());
-			nn.print();
+        p->findSolution();
 
-			evaluator.printTestCases(p->getResult());
+        cout << double(clock() - start) / CLOCKS_PER_SEC << endl;
 
-      // Get time
-      cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+        nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer> *) p->getResult());
+        //nn.print();
+
+        //evaluator.printTestCases(p->getResult());
+
+        // Get time
+        cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+      }
 
       // GENETIC ALGORITHM WITH EVALUATION
       break;
@@ -152,21 +160,27 @@ int main()
         absorption = 1;
       }
 
-      // Start timer
-      start = clock();
+      for(int i = 0; i < 30; ++i) {
+
+        cout << "iteration " << i << endl;
+
+        // Start timer
+        start = clock();
 
         s = new swarm(&stepSize, &baseAttraction, &absorption, swarmSize, iterations, &distribution, &nn);
 
         s->findSolution();
+        cout << double(clock() - start) / CLOCKS_PER_SEC << endl;
 
-        nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)s->getResult());
-        nn.print();
+        nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer> *) s->getResult());
+        //nn.print();
 
-        evaluator.printTestCases(s->getResult());
+        //evaluator.printTestCases(s->getResult());
 
-      // Get time
-      cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+        // Get time
+        //cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
 
+      }
       // FIREFLY ALGORITHM WITH EVALUATION
       break;
 
@@ -176,7 +190,7 @@ int main()
   }
 
   // Pause before exit
-  cout << endl;
-  system("pause");
+  //cout << endl;
+  //system("pause");
   return EXIT_SUCCESS;
 }

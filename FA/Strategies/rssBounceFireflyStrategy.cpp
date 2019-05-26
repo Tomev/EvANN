@@ -176,7 +176,7 @@ double RSSBounceFireflyStrategy::reduceToBounds(double val)
   double reducedValue = val;
 
   while(reducedValue > _upperBound || reducedValue < _lowerBound){
-    if (val < _lowerBound){
+    if (reducedValue < _lowerBound){
       reducedValue = _lowerBound - (reducedValue - _lowerBound);
     }
     else if (reducedValue > _upperBound){

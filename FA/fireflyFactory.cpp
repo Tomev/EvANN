@@ -11,7 +11,7 @@ fireflyFactory::fireflyFactory(double *stepSize, double *baseAttraction, double 
 	: stepSize(stepSize), baseAttraction(baseAttraction), absorption(absorption),
 	  distribution(distribution), fireflyStructure(fireflyStructure)
 {
-	this->strategyType = RSSRoll;
+	this->strategyType = RSSBounce;
 }
 
 // Create proper firefly basing on current strategy type. Default is firefly with no strategy.

@@ -70,6 +70,8 @@ void swarm::findSolution()
   cout << "Standard derivative = " << countStandardDerivative() << endl;
 	// END DEBUG
 
+	cout << countStandardDerivative() << endl;
+
 	// For each iteration
 	for(unsigned int iteration = 0; iteration < iterations; ++iteration)
 	{
@@ -98,11 +100,16 @@ void swarm::findSolution()
 		if(fmod(iteration, iterations / 10) == 0) cout << countFitnessSum() << endl;
 	}
 
-	cout << endl;
+  cout << countStandardDerivative() << endl;
+  cout <<objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
+
+  /*
+  cout << endl;
 
   cout << "Biggest error = " << highestKnownError << endl;
-	cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
+  cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
   cout << "Standard derivative = " << countStandardDerivative() << endl;
+   */
 }
 
 firefly* swarm::findBrightestFirefly()

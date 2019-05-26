@@ -90,15 +90,23 @@ void RSSBounceIndividualStrategy::nodeMutation()
 // In strategies with RSS this should be called before assigning weight
 double RSSBounceIndividualStrategy::reduceToBounds(double val)
 {
+  //cout << "Value reduction start for value: " << val << endl;
+
   double reducedValue = val;
+  int counter = 0;
 
   while(reducedValue > _upperBound || reducedValue < _lowerBound){
-    if (val < _lowerBound){
+    if (reducedValue < _lowerBound){
       reducedValue = _lowerBound - (reducedValue - _lowerBound);
     }
     else if (reducedValue > _upperBound){
       reducedValue = _upperBound - (reducedValue - _upperBound);
     }
+    ++counter;
+
+    if(counter > 10)
+      cout << counter << ": " << reducedValue << endl;
+
   }
 
   //cout << "Reduced val: " << reducedValue << endl;

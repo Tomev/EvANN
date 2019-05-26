@@ -49,11 +49,13 @@ iterations(iterations), distribution(distribution)
  * when it's done best solution is found. */
 void population::findSolution()
 {
-	// DEBUG
-	findBestIndividual();
-	cout << "Start error = " << objectiveFunction->evaluate(bestIndividual->getSolution()) << endl;
-	cout << "Biggest error = " << highestKnownError << endl;
+  // DEBUG
+  findBestIndividual();
+  cout << "Start error = " << objectiveFunction->evaluate(bestIndividual->getSolution()) << endl;
+  cout << "Biggest error = " << highestKnownError << endl;
   cout << "Standard derivative = " << countStandardDerivative() << endl;
+
+  cout << countStandardDerivative() << endl;
 	// END DEBUG
 
 	// For each iteration
@@ -75,16 +77,22 @@ void population::findSolution()
     if(fmod(iteration, iterations/10) == 0)	cout << countFitnessSum() << endl;
 	}
 
-	cout << endl;
+  // Find best individual in final population
+  findBestIndividual();
 
-	// Find best individual in final population
-	findBestIndividual();
+  cout << countStandardDerivative() << endl;
+  cout << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
 
-	// DEBUG
-	cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
-	cout << "Biggest error = " << highestKnownError << endl;
+  /*
+  cout << endl;
+
+  // DEBUG
+  cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
+  cout << "Biggest error = " << highestKnownError << endl;
   cout << "Standard derivative = " << countStandardDerivative() << endl;
-	// END DEBUG
+
+   */
+  // END DEBUG
 }
 
 void population::createOffspringPopulation()

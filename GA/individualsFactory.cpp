@@ -4,7 +4,7 @@
 individualsFactory::individualsFactory(neuralNet *nn, i_distribution *distribution) :
 nn(nn), distribution(distribution)
 {
-  individualStrategyId = RSSRoll;
+  individualStrategyId = RSSBounce;
 }
 
 individual individualsFactory::createIndividual()
