@@ -16,7 +16,7 @@ class RSSBounceIndividualStrategy : public neuralIndividualStrategy{
     void nodeMutation() override;
     void initializeSolution() override;
 
-    double reduceToBounds(double val);
+    virtual double reduceToBounds(double val);
 
 
 };

@@ -4,7 +4,7 @@
 individualsFactory::individualsFactory(neuralNet *nn, i_distribution *distribution) :
 nn(nn), distribution(distribution)
 {
-  individualStrategyId = RSSBounce;
+  individualStrategyId = RSSRoll;
 }
 
 individual individualsFactory::createIndividual()
@@ -14,6 +14,7 @@ individual individualsFactory::createIndividual()
     case neuralIndividual:
       return createNeuralIndividual();
     case RSSRoll:
+      return createRSSRollIndividual();
     case RSSBounce:
       return createRSSBounceIndividual();
     default:
@@ -31,6 +32,8 @@ individual individualsFactory::createIndividual(individual *p1, individual *p2)
       offspring = createNeuralIndividual();
       break;
     case RSSRoll:
+      offspring = createRSSRollIndividual();
+      break;
     case RSSBounce:
       offspring = createRSSBounceIndividual();
       break;
@@ -56,5 +59,5 @@ individual individualsFactory::createRSSBounceIndividual()
 
 individual individualsFactory::createRSSRollIndividual()
 {
-  return individual(new RSSBounceIndividualStrategy(nn->getTopology(), distribution));
+  return individual(new RSSRollIndividualStrategy(nn->getTopology(), distribution));
 }
