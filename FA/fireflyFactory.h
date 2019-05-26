@@ -9,7 +9,7 @@ public:
 
 	enum strategiesType
 	{
-		neuralFirefly
+		neuralFirefly, RSSBounce, RSSRoll
 	};
 
 	fireflyFactory(double *stepSize, double *baseAttraction, double *absorption,
@@ -19,6 +19,8 @@ public:
 	               i_distribution *distribution, neuralFireflyStrategy::topology* fireflyStructure);
 
 	firefly createFirefly();
+    firefly createRSSBounceFirefly();
+    firefly createRSSRollFirefly();
 
 private:
 	unsigned int strategyType;

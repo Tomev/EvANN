@@ -28,11 +28,11 @@ static swarm* s;
 
 enum tasksID
 {
-  Exit, OriginalWork, GANNWessinger, FANNWessinger
+  Exit, OriginalWork, GANNWessinger, GANNWessingerTuned, FANNWessinger, FANNWessingerTuned
 };
 
 // Update each time changes in enum are made
-static unsigned int maxInput = 3;
+static unsigned int maxInput = 5;
 
 int main()
 {
@@ -50,8 +50,10 @@ int main()
   cout << "Select task to perform: " << endl;
   cout << "0) exit," << endl;
   cout << "1) check results from original work," << endl;
-  cout << "2) train NN using EA to solve Wessinger's equation," << endl;
-  cout << "3) train NN using FA to solve Wessinger's equation." << endl;
+  cout << "2) train NN using EA to solve Wessinger's equation (parameters selected)," << endl;
+  cout << "3) train NN using EA to solve Wessinger's equation (tuned)," << endl;
+  cout << "4) train NN using FA to solve Wessinger's equation (parameters selected)," << endl;
+  cout << "5) train NN using FA to solve Wessinger's equation (tuned)." << endl;
   cout << "> ";
 
 
@@ -85,16 +87,23 @@ int main()
       // NEURAL NET TEST WITH FIXED PARAMETERS WITH EVALUATION
       break;
     case GANNWessinger:
+    case GANNWessingerTuned:
       // GENERIC ALGORITHM WITH EVALUATION
 
       // Set attributes
       // TR TODO: Add validations
 
-      cout << "Enter population size:" << endl << ">";
-      cin >> swarmSize;
+      if(taskID == GANNWessinger) {
+        cout << "Enter population size:" << endl << ">";
+        cin >> swarmSize;
 
-      cout << "Enter iterations number:" << endl << ">";
-      cin >> iterations;
+        cout << "Enter iterations number:" << endl << ">";
+        cin >> iterations;
+      }
+      else {
+        swarmSize = 50;
+        iterations = 7000;
+      }
 
       // Start timer
       start = clock();
@@ -114,38 +123,46 @@ int main()
       // GENETIC ALGORITHM WITH EVALUATION
       break;
     case FANNWessinger:
+    case FANNWessingerTuned:
       // FIREFLY ALGORITHM WITH EVALUATION
 
       // TR TODO: Add validations
 
-      cout << "Enter population size:" << endl << ">";
-      cin >> swarmSize;
+      if(taskID == FANNWessinger) {
+        cout << "Enter population size:" << endl << ">";
+        cin >> swarmSize;
 
-      cout << "Enter iterations number:" << endl << ">";
-      cin >> iterations;
+        cout << "Enter iterations number:" << endl << ">";
+        cin >> iterations;
 
-      cout << "Enter step size:" << endl << ">";
-      cin >> stepSize;
+        cout << "Enter step size:" << endl << ">";
+        cin >> stepSize;
 
-      cout << "Enter base attraction:" << endl << ">";
-      cin >> baseAttraction;
+        cout << "Enter base attraction:" << endl << ">";
+        cin >> baseAttraction;
 
-      cout << "Enter absorption:" << endl << ">";
-      cin >> baseAttraction;
+        cout << "Enter absorption:" << endl << ">";
+        cin >> absorption;
+      }
+      else{
+        swarmSize = 50;
+        iterations = 700;
+        stepSize = 0.01;
+        baseAttraction = 0.5;
+        absorption = 1;
+      }
 
       // Start timer
       start = clock();
 
+        s = new swarm(&stepSize, &baseAttraction, &absorption, swarmSize, iterations, &distribution, &nn);
 
-			s = new swarm(&stepSize, &baseAttraction, &absorption, swarmSize,
-										iterations, &distribution, &nn);
+        s->findSolution();
 
-			s->findSolution();
+        nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)s->getResult());
+        nn.print();
 
-			nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)s->getResult());
-			nn.print();
-
-			evaluator.printTestCases(s->getResult());
+        evaluator.printTestCases(s->getResult());
 
       // Get time
       cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;

@@ -28,6 +28,8 @@ protected:
 	virtual void multiplySolution(void* target, double coefficient) = 0;
 	virtual bool hasProperType(void* target) = 0;
 
+
+
 	i_distribution* distribution = 0;
 	double* baseAttraction = 0;
 	double* stepSize = 0;

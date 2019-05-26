@@ -37,8 +37,6 @@ protected:
 	void multiplySolution(void* target, double coefficient);
 	bool hasProperType(void* target);
 
-private:
-
 	vector<layer>* solution;
 	topology* structure;
 
