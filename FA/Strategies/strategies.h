@@ -3,5 +3,6 @@
 
 #include "neuralFireflyStrategy.h"
 #include "rssBounceFireflyStrategy.h"
+#include "rssRollFireflyStrategy.h"
 
 #endif //GENEVANN_STRATEGIES_H

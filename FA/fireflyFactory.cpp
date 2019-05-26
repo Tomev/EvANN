@@ -53,7 +53,7 @@ firefly fireflyFactory::createRSSBounceFirefly()
 firefly fireflyFactory::createRSSRollFirefly()
 {
   return firefly(
-    new neuralFireflyStrategy(
+    new RSSRollFireflyStrategy(
       this->stepSize, this->baseAttraction, this->absorption,
       this->distribution, static_cast<neuralFireflyStrategy::topology*>(this->fireflyStructure)
     )

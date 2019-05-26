@@ -26,7 +26,7 @@ public:
 
   string toString();
 
-private:
+protected:
   vector<unsigned int> *topology = NULL;
   vector<layer> solution;
 
@@ -39,11 +39,13 @@ private:
    * 2 is recommended. */
   int numberOfNodesToMutate = 2;
 
+  virtual void initializeSolution();
+
   void unbiasedMutation();
   void biasedMutation();
-  void nodeMutation();
+  virtual void nodeMutation();
 
-  void crossoverWeights(void* solution, void* target);
+  virtual void crossoverWeights(void* solution, void* target);
   void crossoverNodes(void* solution, void* target);
 
   bool hasMutationOccurred();

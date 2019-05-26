@@ -1,12 +1,13 @@
 #ifndef GENEVANN_STRATEGIES_H
 #define GENEVANN_STRATEGIES_H
 
-#include "i_strategy.h"
 #include "neuralIndividualStrategy.h"
+#include "rssBounceIndividualStrategy.h"
+#include "rssRollIndividualStrategy.h"
 
 enum strategiesTypes
 {
-  neuralIndividual
+  neuralIndividual, RSSBounce, RSSRoll
 };
 
 #endif //GENEVANN_STRATEGIES_H

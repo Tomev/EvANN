@@ -21,6 +21,8 @@ private:
   unsigned int individualStrategyId = 0;
 
   individual createNeuralIndividual();
+  individual createRSSBounceIndividual();
+  individual createRSSRollIndividual();
 
 };
 
