@@ -4,16 +4,7 @@
 #include "FA/swarm.h"
 #include "GA/population.h"
 
-
 using namespace std;
-
-
-static exponentialDistribution distribution;
-
-static neuralFireflyStrategy::topology topology = {1, 4, 1};
-
-static neuralNet nn(&topology);
-static alternativeNeuralWessingersEvaluator evaluator(&nn);
 
 static double stepSize = 0.01;
 static double baseAttraction = 0.5;
@@ -28,18 +19,24 @@ static swarm* s;
 
 enum tasksID
 {
-  Exit, OriginalWork, GANNWessinger, FANNWessinger
+  Exit, OriginalWork, GANNWessingerDefault, FANNWessingerDefault, GANNWessinger, FANNWessinger
 };
 
 // Update each time changes in enum are made
-static unsigned int maxInput = 3;
+static unsigned int maxInput = 5;
 
 int main()
 {
+  exponentialDistribution distribution;
+  neuralFireflyStrategy::topology topology = {1, 4, 1};
+  neuralNet nn(&topology);
+  alternativeNeuralWessingersEvaluator evaluator(&nn);
+
   /* Setup */
 
   // Set random seed for proper functioning of randomizers.
-  srand(time(NULL));
+  std::random_device dev;
+  srand(dev());
   clock_t start;
   string PAUSE;
 
@@ -50,8 +47,10 @@ int main()
   cout << "Select task to perform: " << endl;
   cout << "0) exit," << endl;
   cout << "1) check results from original work," << endl;
-  cout << "2) train NN using EA to solve Wessinger's equation," << endl;
-  cout << "3) train NN using FA to solve Wessinger's equation." << endl;
+  cout << "2) train NN using EA and default settings to solve Wessinger's equation," << endl;
+  cout << "3) train NN using FA and default settings to solve Wessinger's equation," << endl;
+  cout << "4) train NN using EA to solve Wessinger's equation," << endl;
+  cout << "5) train NN using FA to solve Wessinger's equation." << endl;
   cout << "> ";
 
 
@@ -83,7 +82,7 @@ int main()
 			evaluator.printTestCases(&solution);
 
       // NEURAL NET TEST WITH FIXED PARAMETERS WITH EVALUATION
-      break;
+    break;
     case GANNWessinger:
       // GENERIC ALGORITHM WITH EVALUATION
 
@@ -112,11 +111,11 @@ int main()
       cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
 
       // GENETIC ALGORITHM WITH EVALUATION
-      break;
+    break;
     case FANNWessinger:
       // FIREFLY ALGORITHM WITH EVALUATION
 
-      // TR TODO: Add validations
+      // TR TODO: Validators needed.
 
       cout << "Enter population size:" << endl << ">";
       cin >> swarmSize;
@@ -136,7 +135,6 @@ int main()
       // Start timer
       start = clock();
 
-
 			s = new swarm(&stepSize, &baseAttraction, &absorption, swarmSize,
 										iterations, &distribution, &nn);
 
@@ -153,6 +151,57 @@ int main()
       // FIREFLY ALGORITHM WITH EVALUATION
       break;
 
+      case FANNWessingerDefault:
+      // FIREFLY ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
+        cout << "Using FF with default settings.";
+        swarmSize = 50;
+        iterations = 700;
+        baseAttraction = 0.5;
+        stepSize = 0.01;
+        absorption = 1.0;
+
+          // Start timer
+        start = clock();
+
+        s = new swarm(&stepSize, &baseAttraction, &absorption, swarmSize,
+                      iterations, &distribution, &nn);
+
+        s->findSolution();
+
+        nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)s->getResult());
+        nn.print();
+
+        evaluator.printTestCases(s->getResult());
+
+        // Get time
+        cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+
+    break;
+    // FIREFLY ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
+    case GANNWessingerDefault:
+    // GENETIC ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
+
+      // Set attributes
+      swarmSize = 50;
+      iterations = 7000;
+
+      // Start timer
+      start = clock();
+
+      p = new population(swarmSize, iterations, &nn, &distribution);
+
+      p->findSolution();
+
+      nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)p->getResult());
+      nn.print();
+
+      evaluator.printTestCases(p->getResult());
+
+      // Get time
+      cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+
+    // GENETIC ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
+    break;
     case Exit:
     default:
       return EXIT_SUCCESS;
