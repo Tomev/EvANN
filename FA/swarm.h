@@ -4,7 +4,6 @@
 #include "../NN/neuralNet.h"
 #include "fireflyFactory.h"
 #include "../ObjectiveFunctions/objectiveFunctions.h"
-#include "../ObjectiveFunctions/Normalizers/i_normalizer.h"
 
 class swarm
 {
@@ -34,7 +33,6 @@ private:
 	double countFitnessSum();
 	double countVariation();
 	double countStandardDerivative();
-
 };
 
 
