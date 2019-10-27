@@ -4,7 +4,7 @@
 #include "Normalizers/normalizers.h"
 
 alternativeNeuralWessingersEvaluator::alternativeNeuralWessingersEvaluator(neuralNet *nn)
-	: nn(nn), _normalizer(make_shared<logNormalizer>())
+	: nn(nn), _normalizer(make_shared<boundedLogNormalizer>())
 {}
 
 // Count overall error of nn with weights given by solution
