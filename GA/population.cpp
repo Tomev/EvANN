@@ -45,7 +45,8 @@ void population::findSolution()
 {
 	// DEBUG
 	findBestIndividual();
-  cout << "Standard derivative = " << countStandardDerivative() << endl;
+  cout << "Standard deviation = " << countStandardDeviation() << endl;
+  vector<double> convergence = {};
 	// END DEBUG
 
 	// For each iteration
@@ -66,8 +67,10 @@ void population::findSolution()
     selectNewPopulation();
 
     // Show that application is working by printing "." after 100 iterations.
-    if(fmod(iteration, iterations / 10) == 0)
-      cout << "Iteration " << iteration << ": " << countFitnessSum() / individuals.size() << endl;
+    if(fmod(iteration, iterations / 10) == 0) {
+      convergence.push_back(countFitnessSum() / individuals.size());
+      cout << "Iteration " << iteration << ": " << convergence.back() << endl;
+    }
 	}
 
 	cout << endl;
@@ -76,7 +79,10 @@ void population::findSolution()
 	findBestIndividual();
 
 	// DEBUG
-  cout << "Standard derivative = " << countStandardDerivative() << endl;
+  cout << "Standard deviation = " << countStandardDeviation() << endl << "Convergence: " << endl;
+  for(auto val : convergence)
+    cout << val << ",";
+  cout << endl;
 	// END DEBUG
 }
 
@@ -219,7 +225,7 @@ double population::countVariation()
   return variation;
 }
 
-double population::countStandardDerivative()
+double population::countStandardDeviation()
 {
   return sqrt(countVariation());
 }

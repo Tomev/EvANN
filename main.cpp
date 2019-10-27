@@ -154,7 +154,7 @@ int main()
       case FANNWessingerDefault:
       // FIREFLY ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
         for(unsigned int i = 0; i < experimentsNum; ++i) {
-          cout << "Using FF with default settings.";
+          cout << "Using FF with default settings." << endl;
           swarmSize = 50;
           iterations = 700;
           baseAttraction = 0.5;
@@ -170,7 +170,7 @@ int main()
           s->findSolution();
 
           nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)s->getResult());
-          nn.print();
+          //nn.print();
 
           evaluator.printTestCases(s->getResult());
 
@@ -195,7 +195,7 @@ int main()
         p->findSolution();
 
         nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer> *) p->getResult());
-        nn.print();
+        //nn.print();
 
         evaluator.printTestCases(p->getResult());
 

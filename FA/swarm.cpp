@@ -42,7 +42,8 @@ void swarm::findSolution()
 {
 	// DEBUG
 	bestFirefly = findBrightestFirefly();
-  cout << "Standard derivative = " << countStandardDerivative() << endl;
+  cout << "Standard deviation = " << countStandardDeviation() << endl;
+  vector<double> convergence = {};
 	// END DEBUG
 
 	// For each iteration
@@ -66,16 +67,20 @@ void swarm::findSolution()
 			}
 
 			// Move firefly in random direction if it didn't move
-			//if(!hasMoved) moveFFAndUpdateSwarmData(fly_i, nullptr);
       if(!hasMoved) moveFFAndUpdateSwarmData(fly_i, nullptr);
 		}
 
-		if(fmod(iteration, iterations / 10) == 0)
-		  cout << "Iteration " << iteration << ": " << countFitnessSum() / fireflies.size() << endl;
+		if(fmod(iteration, iterations / 10) == 0){
+			convergence.push_back(countFitnessSum() / fireflies.size());
+			cout << "Iteration " << iteration << ": " << convergence.back() << endl;
+		}
 	}
 
 	cout << endl;
-  cout << "Standard derivative = " << countStandardDerivative() << endl;
+  cout << "Standard deviation = " << countStandardDeviation() << endl << "Convergence: " << endl;
+  for(auto val : convergence)
+  	cout << val << ",";
+  cout << endl;
 }
 
 firefly* swarm::findBrightestFirefly()
@@ -155,7 +160,7 @@ double swarm::countVariation()
   return variation;
 }
 
-double swarm::countStandardDerivative()
+double swarm::countStandardDeviation()
 {
   return sqrt(countVariation());
 }

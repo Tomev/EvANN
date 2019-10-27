@@ -32,7 +32,7 @@ private:
 
 	double countFitnessSum();
 	double countVariation();
-	double countStandardDerivative();
+	double countStandardDeviation();
 };
 
 

@@ -41,7 +41,7 @@ protected:
 
 	double countFitnessSum();
 	double countVariation();
-	double countStandardDerivative();
+	double countStandardDeviation();
 };
 
 #endif //GENEVANN_POPULATION_H

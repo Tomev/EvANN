@@ -79,11 +79,13 @@ void alternativeNeuralWessingersEvaluator::printTestCases(void *solution)
 		// Add absolute difference between result and expected value
 		receivedVal = calculateOutputValue(testCase, output.at(0));
 
+		/*
 		cout << "t = " << testCase;
 		cout << " receivedVal = " << receivedVal << endl;
 
 		cout << "Expected trial = " << sqrt(testCase * testCase + 0.5);
 		cout << " Actual Trial = " << trialFunctionValue(testCase, output.at(0)) << endl;
+		*/
 
 		overallError += pow((receivedVal), 2);
 
