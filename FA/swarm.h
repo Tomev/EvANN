@@ -4,8 +4,7 @@
 #include "../NN/neuralNet.h"
 #include "fireflyFactory.h"
 #include "../ObjectiveFunctions/objectiveFunctions.h"
-
-// TODO: constant correctness
+#include "../ObjectiveFunctions/Normalizers/i_normalizer.h"
 
 class swarm
 {
@@ -24,8 +23,9 @@ private:
   double highestKnownError = 0.0;
 
 	vector<firefly> fireflies;
-	firefly* bestFirefly = NULL;
-	i_objectiveFunction* objectiveFunction = NULL;
+	firefly* bestFirefly = nullptr;
+	i_objectiveFunction* objectiveFunction = nullptr;
+	normalizerPtr _normalizer;
 
 	firefly bestSolutionHolder;
 	void updateBestSolutionHolder(firefly* ff);

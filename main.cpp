@@ -35,8 +35,8 @@ int main()
   /* Setup */
 
   // Set random seed for proper functioning of randomizers.
-  std::random_device dev;
-  srand(dev());
+  std::random_device rd;
+  srand(rd());
   clock_t start;
   string PAUSE;
 

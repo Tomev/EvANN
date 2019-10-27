@@ -5,6 +5,7 @@
 #include "../ObjectiveFunctions/objectiveFunctions.h"
 #include "Selectors/i_selector.h"
 #include "individualsFactory.h"
+#include "../ObjectiveFunctions/Normalizers/i_normalizer.h"
 
 class population {
 public:
@@ -20,12 +21,17 @@ protected:
   unsigned int mutationChancePercent = 5;
   unsigned int iterations = 50000;
 
+  std::uniform_int_distribution<> _uniformIntDistribution;
+  std::mt19937 _gen;
+
   // TODO: Change to some kind of smart pointer.
-  individual* bestIndividual = NULL;
-  individualsFactory* factory = NULL;
-  i_objectiveFunction* objectiveFunction = NULL;
-  i_selector* selector = NULL;
-  i_distribution* distribution = NULL;
+  normalizerPtr _normalizer;
+
+  individual* bestIndividual = nullptr;
+  individualsFactory* factory = nullptr;
+  i_objectiveFunction* objectiveFunction = nullptr;
+  i_selector* selector = nullptr;
+  i_distribution* distribution = nullptr;
 
   vector<individual> individuals;
   vector<individual> offsprings;

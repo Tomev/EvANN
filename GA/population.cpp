@@ -1,14 +1,20 @@
 #include <iostream>
 #include "population.h"
 #include "Selectors/selectors.h"
+#include "../ObjectiveFunctions/Normalizers/basicNormalizer.h"
 
 // Constructor for neural net oriented population
 population::population(unsigned int size, unsigned int iterations,
                        neuralNet* nn, i_distribution* distribution) :
 iterations(iterations), distribution(distribution)
 {
+  std::random_device rd;
+  _gen = std::mt19937(rd()); //Standard Mersenne-Twister engine seeded with rd()
+  _uniformIntDistribution = std::uniform_int_distribution<>(0, 100);
+
 	// Add proper objective function
 	objectiveFunction = new alternativeNeuralWessingersEvaluator(nn);
+	_normalizer = std::make_shared<basicNormalizer>();
 
   // Create factory
   factory = new individualsFactory(nn, distribution);
@@ -72,7 +78,8 @@ void population::findSolution()
     selectNewPopulation();
 
     // Show that application is working by printing "." after 100 iterations.
-    if(fmod(iteration, iterations/10) == 0)	cout << countFitnessSum() << endl;
+    if(fmod(iteration, iterations/10) == 0)
+      cout << "Iteration " << iteration << ": " << countFitnessSum() << endl;
 	}
 
 	cout << endl;
@@ -133,18 +140,18 @@ void population::mutateOldPopulation()
 {
   unsigned int mutationRollValue;
   // For each individual in the population
-  for(unsigned int i = 0; i < individuals.size(); ++i)
+  for(auto individual : individuals)
   {
     // Roll for mutation
-    mutationRollValue = rand() % 100 + 1;
+    mutationRollValue = _uniformIntDistribution(_gen);
 
     // Mutate i-th individual if mutation occurred
     if(mutationRollValue <= mutationChancePercent)
     {
-      individuals.at(i).mutate();
+      individual.mutate();
 
       // Evaluate individual
-      double individualsError = objectiveFunction->evaluate(individuals.at(i).getSolution());
+      double individualsError = objectiveFunction->evaluate(individual.getSolution());
 
       // Update error data if needed
       if(individualsError > highestKnownError)
@@ -157,7 +164,7 @@ void population::mutateOldPopulation()
       }
 
       // Update individuals fitness
-      individuals.at(i).setFitnessValue(normalize(individualsError));
+      individual.setFitnessValue(normalize(individualsError));
     }
   }
 }
@@ -225,17 +232,16 @@ void* population::getResult()
 // desirable fitness.
 void population::normalizePopulation(vector<individual>* population)
 {
-	for(int i = 0; i < population->size(); ++i)
+	for(auto individual : *population)
 	{
-		individual* currentIndividual = &population->at(i);
-		currentIndividual->setFitnessValue(normalize(currentIndividual->getEvaluationValue()));
+		individual.setFitnessValue(normalize(individual.getEvaluationValue()));
 	}
 }
 
 // Normalizing target value according to biggest known error.
 double population::normalize(double target)
 {
-	return 1 - (target / highestKnownError);
+  return _normalizer->normalize(target);
 }
 
 // Method used to find best individual in the population.
@@ -257,10 +263,7 @@ double population::countFitnessSum()
 {
   double sum = 0.0;
 
-  for(unsigned int i = 0; i < individuals.size(); ++i)
-  {
-    sum += individuals.at(i).getFitnessValue();
-  }
+  for(auto individual : individuals) sum += individual.getFitnessValue();
 
   return sum;
 }
@@ -270,10 +273,7 @@ double population::countVariation()
   double variation = 0.0;
   double average = countFitnessSum() / individuals.size();;
 
-  for(unsigned int i = 0; i < individuals.size(); ++i)
-  {
-    variation += pow(individuals.at(i).getFitnessValue() - average ,2);
-  }
+  for(auto individual : individuals) variation += pow(individual.getFitnessValue() - average ,2);
 
   variation /= individuals.size();
 
