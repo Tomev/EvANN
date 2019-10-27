@@ -3,5 +3,6 @@
 
 #include "basicNormalizer.h"
 #include "boundedNormalizer.h"
+#include "logNormalizer.h"
 
 #endif //GENEVANN_NORMALIZERS_H

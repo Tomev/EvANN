@@ -7,7 +7,7 @@ class boundedNormalizer : public i_normalizer {
   public:
     double normalize(double const &value) override;
   private:
-    double limit = 10e5;
+    double limit = 10e3;
 };
 
 
