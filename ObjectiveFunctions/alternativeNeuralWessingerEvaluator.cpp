@@ -1,9 +1,10 @@
 #include <iostream>
 
 #include "alternativeNeuralWessingerEvaluator.h"
+#include "Normalizers/normalizers.h"
 
 alternativeNeuralWessingersEvaluator::alternativeNeuralWessingersEvaluator(neuralNet *nn)
-	: nn(nn)
+	: nn(nn), _normalizer(make_shared<basicNormalizer>())
 {}
 
 // Count overall error of nn with weights given by solution
@@ -11,8 +12,7 @@ double alternativeNeuralWessingersEvaluator::evaluate(void *solution)
 {
 	double error = 0.0;
 
-	vector<neuralFireflyStrategy::layer>* target =
-		static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
+	auto target = static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
 
 	// Set neural nets weights
 	nn->setWeightsFromNeuronsStructure(target);
@@ -47,7 +47,7 @@ double alternativeNeuralWessingersEvaluator::evaluate(void *solution)
 		nn->resetNonInputLayerInputs();
 	}
 
-	return error;// / denominator;
+	return _normalizer->normalize(error);
 }
 
 // Evaluate and print error for each test case
@@ -55,8 +55,7 @@ void alternativeNeuralWessingersEvaluator::printTestCases(void *solution)
 {
 	double overallError = 0.0;
 
-	vector<neuralFireflyStrategy::layer>* target =
-			static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
+	auto target = static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
 
 	// Set neural nets weights
 	nn->setWeightsFromNeuronsStructure(target);

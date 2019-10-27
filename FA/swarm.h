@@ -20,20 +20,16 @@ public:
 private:
 
 	unsigned int iterations = 10000;
-  double highestKnownError = 0.0;
 
 	vector<firefly> fireflies;
 	firefly* bestFirefly = nullptr;
 	i_objectiveFunction* objectiveFunction = nullptr;
-	normalizerPtr _normalizer;
 
 	firefly bestSolutionHolder;
 	void updateBestSolutionHolder(firefly* ff);
   void moveFFAndUpdateSwarmData(firefly* ff, firefly* target);
 
   firefly* findBrightestFirefly();
-  double normalize(double value);
-  void normalizeSwarm();
 
 	double countFitnessSum();
 	double countVariation();

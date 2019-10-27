@@ -32,6 +32,8 @@ int main()
   neuralNet nn(&topology);
   alternativeNeuralWessingersEvaluator evaluator(&nn);
 
+  unsigned int experimentsNum = 1;
+
   /* Setup */
 
   // Set random seed for proper functioning of randomizers.
@@ -53,9 +55,7 @@ int main()
   cout << "5) train NN using FA to solve Wessinger's equation." << endl;
   cout << "> ";
 
-
   cin >> taskID;
-
 
   while(cin.fail() || taskID > maxInput)
   {
@@ -153,52 +153,55 @@ int main()
 
       case FANNWessingerDefault:
       // FIREFLY ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
-        cout << "Using FF with default settings.";
-        swarmSize = 50;
-        iterations = 700;
-        baseAttraction = 0.5;
-        stepSize = 0.01;
-        absorption = 1.0;
+        for(unsigned int i = 0; i < experimentsNum; ++i) {
+          cout << "Using FF with default settings.";
+          swarmSize = 50;
+          iterations = 700;
+          baseAttraction = 0.5;
+          stepSize = 0.01;
+          absorption = 1.0;
 
-          // Start timer
-        start = clock();
+            // Start timer
+          start = clock();
 
-        s = new swarm(&stepSize, &baseAttraction, &absorption, swarmSize,
-                      iterations, &distribution, &nn);
+          s = new swarm(&stepSize, &baseAttraction, &absorption, swarmSize,
+                        iterations, &distribution, &nn);
 
-        s->findSolution();
+          s->findSolution();
 
-        nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)s->getResult());
-        nn.print();
+          nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)s->getResult());
+          nn.print();
 
-        evaluator.printTestCases(s->getResult());
+          evaluator.printTestCases(s->getResult());
 
-        // Get time
-        cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
-
+          // Get time
+          cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+        }
     break;
     // FIREFLY ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
     case GANNWessingerDefault:
     // GENETIC ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
 
-      // Set attributes
-      swarmSize = 50;
-      iterations = 7000;
+      for(unsigned int i = 0; i < experimentsNum; ++i) {
+        // Set attributes
+        swarmSize = 50;
+        iterations = 7000;
 
-      // Start timer
-      start = clock();
+        // Start timer
+        start = clock();
 
-      p = new population(swarmSize, iterations, &nn, &distribution);
+        p = new population(swarmSize, iterations, &nn, &distribution);
 
-      p->findSolution();
+        p->findSolution();
 
-      nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer>*)p->getResult());
-      nn.print();
+        nn.setWeightsFromNeuronsStructure((vector<neuralFireflyStrategy::layer> *) p->getResult());
+        nn.print();
 
-      evaluator.printTestCases(p->getResult());
+        evaluator.printTestCases(p->getResult());
 
-      // Get time
-      cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+        // Get time
+        cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+      }
 
     // GENETIC ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
     break;
@@ -207,8 +210,9 @@ int main()
       return EXIT_SUCCESS;
   }
 
-  // Pause before exit
   cout << endl;
-  system("pause");
+
+  // Pause before exit
+  //system("pause");
   return EXIT_SUCCESS;
 }

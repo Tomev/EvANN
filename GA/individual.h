@@ -11,15 +11,13 @@ class individual
 public:
 
   individual();
-  individual(i_strategy* strategy);
+  explicit individual(i_strategy* strategy);
 
   void mutate();
   void cross(void* solution, individual* target);
 
   void setFitnessValue(double newValue);
   double getFitnessValue();
-  void setEvaluationValue(double value);
-  double getEvaluationValue();
 
   void* getSolution();
   void setSolution(void* newSolution);
@@ -28,10 +26,9 @@ public:
 
 protected:
   double fitnessValue = 0.0;
-  double evaluationValue = 0.0;
 
   //TR TODO: Change to some kind of smart pointer.
-  i_strategy* strategy = NULL;
+  i_strategy* strategy = nullptr;
 };
 
 #endif //GENEVANN_I_INDIVIDUAL_H

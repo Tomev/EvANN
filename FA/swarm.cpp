@@ -1,5 +1,4 @@
 #include "swarm.h"
-#include "../ObjectiveFunctions/Normalizers/basicNormalizer.h"
 
 // Create and initialize fireflies swarm
 swarm::swarm( double *stepSize, double *baseAttraction, double *absorption,
@@ -13,7 +12,6 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption,
 
 	// Create adequate objective function
 	objectiveFunction = new alternativeNeuralWessingersEvaluator(nn);
-	_normalizer = std::make_shared<basicNormalizer>();
 
 	double evaluationValue;
 
@@ -30,14 +28,8 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption,
 		// Evaluate it
 		evaluationValue = objectiveFunction->evaluate(newFirefly->getSolution());
 		newFirefly->setEvaluationValue(evaluationValue);
-
-		// Check if its error is highest so far and update if so
-		if(evaluationValue > highestKnownError)
-			highestKnownError = evaluationValue;
+		newFirefly->setIllumination(evaluationValue);
 	}
-
-	// Set proper normalized evaluation (illumination) for whole swarm
-	normalizeSwarm();
 
 	// Initialize and remember current best solution
 	bestFirefly = findBrightestFirefly();
@@ -46,27 +38,10 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption,
 	updateBestSolutionHolder(bestFirefly);
 }
 
-void swarm::normalizeSwarm()
-{
-	// For each firefly in swarm
-	for(auto fly : fireflies)
-	{
-		// Normalize its illumination
-		fly.setIllumination(normalize(fly.getEvaluationValue()));
-	}
-}
-
-double swarm::normalize(double value)
-{
-	return _normalizer->normalize(value);
-}
-
 void swarm::findSolution()
 {
 	// DEBUG
 	bestFirefly = findBrightestFirefly();
-	cout << "Start error = " << objectiveFunction->evaluate(bestFirefly->getSolution()) << endl;
-  cout << "Biggest error = " << highestKnownError << endl;
   cout << "Standard derivative = " << countStandardDerivative() << endl;
 	// END DEBUG
 
@@ -95,13 +70,11 @@ void swarm::findSolution()
       if(!hasMoved) moveFFAndUpdateSwarmData(fly_i, nullptr);
 		}
 
-		if(fmod(iteration, iterations / 10) == 0) cout << "Iteration " << iteration << ": " << countFitnessSum() << endl;
+		if(fmod(iteration, iterations / 10) == 0)
+		  cout << "Iteration " << iteration << ": " << countFitnessSum() / fireflies.size() << endl;
 	}
 
 	cout << endl;
-
-  cout << "Biggest error = " << highestKnownError << endl;
-	cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
   cout << "Standard derivative = " << countStandardDerivative() << endl;
 }
 
@@ -140,17 +113,9 @@ void swarm::moveFFAndUpdateSwarmData(firefly* ff, firefly* target)
   else ff->flyTowards(target->getSolution());
 
   // Evaluate new position of ff
-  ff->setEvaluationValue(objectiveFunction->evaluate(ff->getSolution()));
-  ff->setIllumination(normalize(ff->getEvaluationValue()));
-
-  // Update biggest error if newPositionError is bigger
-  if(ff->getEvaluationValue() > highestKnownError)
-  {
-    highestKnownError = ff->getEvaluationValue();
-
-    // Normalize swarm according to new error
-    normalizeSwarm();
-  }
+  double evaluation = objectiveFunction->evaluate(ff->getSolution());
+  ff->setEvaluationValue(evaluation);
+  ff->setIllumination(evaluation);
 
   // Compare moved firefly with current best
   if(ff->getIllumination() > bestFirefly->getIllumination())
