@@ -4,7 +4,7 @@
 #include "Normalizers/normalizers.h"
 
 alternativeNeuralWessingersEvaluator::alternativeNeuralWessingersEvaluator(neuralNet *nn)
-	: nn(nn), _normalizer(make_shared<boundedLogNormalizer>())
+	: nn(nn), _normalizer(make_shared<logNormalizer>())
 {}
 
 // Count overall error of nn with weights given by solution
@@ -95,7 +95,8 @@ void alternativeNeuralWessingersEvaluator::printTestCases(void *solution)
 		nn->resetNonInputLayerInputs();
 	}
 
-	cout << "Total error: " << overallError << endl;
+	//cout << "Total error: " << overallError << endl;
+  cout << overallError << endl;
 }
 
 /* Calculates value of Wessinger equation for given input and

@@ -32,7 +32,7 @@ int main()
   neuralNet nn(&topology);
   alternativeNeuralWessingersEvaluator evaluator(&nn);
 
-  unsigned int experimentsNum = 1;
+  unsigned int experimentsNum = 30;
 
   /* Setup */
 
@@ -175,7 +175,7 @@ int main()
           evaluator.printTestCases(s->getResult());
 
           // Get time
-          cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+          cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s.\n\n";
         }
     break;
     // FIREFLY ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
@@ -200,7 +200,7 @@ int main()
         evaluator.printTestCases(p->getResult());
 
         // Get time
-        cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s." << endl;
+        cout << "Elapsed time: " << double(clock() - start) / CLOCKS_PER_SEC << " s.\n\n";
       }
 
     // GENETIC ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS

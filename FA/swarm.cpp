@@ -77,10 +77,9 @@ void swarm::findSolution()
 	}
 
 	cout << endl;
-  cout << "Standard deviation = " << countStandardDeviation() << endl << "Convergence: " << endl;
+  cout << "Standard deviation = " << countStandardDeviation() << endl << "Convergence exp: " << endl;
   for(auto val : convergence)
-  	cout << val << ",";
-  cout << endl;
+  	cout << val << endl;
 }
 
 firefly* swarm::findBrightestFirefly()

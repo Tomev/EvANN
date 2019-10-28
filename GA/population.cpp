@@ -81,8 +81,7 @@ void population::findSolution()
 	// DEBUG
   cout << "Standard deviation = " << countStandardDeviation() << endl << "Convergence: " << endl;
   for(auto val : convergence)
-    cout << val << ",";
-  cout << endl;
+    cout << val << endl;
 	// END DEBUG
 }
 
