@@ -32,7 +32,7 @@ int main()
   neuralNet nn(&topology);
   alternativeNeuralWessingersEvaluator evaluator(&nn);
 
-  unsigned int experimentsNum = 30;
+  unsigned int experimentsNum = 1;
 
   /* Setup */
 
@@ -153,8 +153,13 @@ int main()
 
       case FANNWessingerDefault:
       // FIREFLY ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
+
+        cout << "Using FF with default settings." << endl;
+
         for(unsigned int i = 0; i < experimentsNum; ++i) {
-          cout << "Using FF with default settings." << endl;
+
+          cout << "Iteration " << i << endl;
+
           swarmSize = 50;
           iterations = 700;
           baseAttraction = 0.5;
@@ -182,7 +187,12 @@ int main()
     case GANNWessingerDefault:
     // GENETIC ALGORITHM WITH EVALUATION WITH DEFAULT SETTINGS
 
+      cout << "Using EA with default settings." << endl;
+
       for(unsigned int i = 0; i < experimentsNum; ++i) {
+
+        cout << "Iteration " << i << endl;
+
         // Set attributes
         swarmSize = 50;
         iterations = 7000;
