@@ -1,9 +1,10 @@
 #include <iostream>
 
 #include "alternativeNeuralWessingerEvaluator.h"
+#include "Normalizers/normalizers.h"
 
 alternativeNeuralWessingersEvaluator::alternativeNeuralWessingersEvaluator(neuralNet *nn)
-	: nn(nn)
+	: nn(nn), _normalizer(make_shared<logNormalizer>())
 {}
 
 // Count overall error of nn with weights given by solution
@@ -11,8 +12,7 @@ double alternativeNeuralWessingersEvaluator::evaluate(void *solution)
 {
 	double error = 0.0;
 
-	vector<neuralFireflyStrategy::layer>* target =
-		static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
+	auto target = static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
 
 	// Set neural nets weights
 	nn->setWeightsFromNeuronsStructure(target);
@@ -47,7 +47,7 @@ double alternativeNeuralWessingersEvaluator::evaluate(void *solution)
 		nn->resetNonInputLayerInputs();
 	}
 
-	return error;// / denominator;
+	return _normalizer->normalize(error);
 }
 
 // Evaluate and print error for each test case
@@ -55,8 +55,7 @@ void alternativeNeuralWessingersEvaluator::printTestCases(void *solution)
 {
 	double overallError = 0.0;
 
-	vector<neuralFireflyStrategy::layer>* target =
-			static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
+	auto target = static_cast<vector<neuralFireflyStrategy::layer>*>(solution);
 
 	// Set neural nets weights
 	nn->setWeightsFromNeuronsStructure(target);
@@ -80,11 +79,13 @@ void alternativeNeuralWessingersEvaluator::printTestCases(void *solution)
 		// Add absolute difference between result and expected value
 		receivedVal = calculateOutputValue(testCase, output.at(0));
 
+		/*
 		cout << "t = " << testCase;
 		cout << " receivedVal = " << receivedVal << endl;
 
 		cout << "Expected trial = " << sqrt(testCase * testCase + 0.5);
 		cout << " Actual Trial = " << trialFunctionValue(testCase, output.at(0)) << endl;
+		*/
 
 		overallError += pow((receivedVal), 2);
 
@@ -94,7 +95,8 @@ void alternativeNeuralWessingersEvaluator::printTestCases(void *solution)
 		nn->resetNonInputLayerInputs();
 	}
 
-	cout << "Total error: " << overallError << endl;
+	//cout << "Total error: " << overallError << endl;
+  cout << overallError << endl;
 }
 
 /* Calculates value of Wessinger equation for given input and

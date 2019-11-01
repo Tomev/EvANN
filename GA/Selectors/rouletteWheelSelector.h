@@ -9,16 +9,19 @@ class rouletteWheelSelector : public i_selector
 public:
 
   rouletteWheelSelector(std::vector<individual>* population, int scalingFunctionId);
+  ~rouletteWheelSelector();
 
-  unsigned int selectIndividual();
-
-  void setNewPopulation(std::vector<individual>* population);
-  void setMaximalValue(double val);
-  void selectParents(unsigned int* p1, unsigned int* p2);
+  unsigned int selectIndividual() override ;
+  void setNewPopulation(std::vector<individual>* population) override ;
+  void setMaximalValue(double val) override ;
+  void selectParents(unsigned int* p1, unsigned int* p2) override ;
 
 protected:
-  std::vector<individual>* population = 0;
+  std::vector<individual>* population = nullptr;
   i_scalingFunction* scalingFunction;
+
+  std::uniform_real_distribution<> _uniformRealDistribution;
+  std::mt19937 _gen;
 };
 
 

@@ -28,14 +28,8 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption,
 		// Evaluate it
 		evaluationValue = objectiveFunction->evaluate(newFirefly->getSolution());
 		newFirefly->setEvaluationValue(evaluationValue);
-
-		// Check if its error is highest so far and update if so
-		if(evaluationValue > highestKnownError)
-			highestKnownError = evaluationValue;
+		newFirefly->setIllumination(evaluationValue);
 	}
-
-	// Set proper normalized evaluation (illumination) for whole swarm
-	normalizeSwarm();
 
 	// Initialize and remember current best solution
 	bestFirefly = findBrightestFirefly();
@@ -44,72 +38,49 @@ swarm::swarm( double *stepSize, double *baseAttraction, double *absorption,
 	updateBestSolutionHolder(bestFirefly);
 }
 
-void swarm::normalizeSwarm()
-{
-	// For each firefly in swarm
-	for(unsigned int f = 0; f < fireflies.size(); ++f)
-	{
-		// Normalize its illumination
-		firefly* fly = &fireflies.at(f);
-		fly->setIllumination(normalize(fly->getEvaluationValue()));
-	}
-}
-
-double swarm::normalize(double value)
-{
-	if(highestKnownError > 0) return 1 - value / highestKnownError;
-	else return 1;
-}
-
 void swarm::findSolution()
 {
-	// DEBUG
-	bestFirefly = findBrightestFirefly();
-	cout << "Start error = " << objectiveFunction->evaluate(bestFirefly->getSolution()) << endl;
-  cout << "Biggest error = " << highestKnownError << endl;
-  cout << "Standard derivative = " << countStandardDerivative() << endl;
-	// END DEBUG
+  // DEBUG
+  bestFirefly = findBrightestFirefly();
+  cout << "Standard deviation = " << countStandardDeviation() << endl;
+  vector<double> convergence = {};
+  // END DEBUG
 
-	cout << countStandardDerivative() << endl;
+  // For each iteration
+  for(unsigned int iteration = 0; iteration < iterations; ++iteration)
+  {
+      // For each both fireflies
+      for(unsigned int i = 0; i < fireflies.size(); ++i)
+  {
+        firefly* fly_i = &(fireflies[i]);
+          bool hasMoved = false;
 
-	// For each iteration
-	for(unsigned int iteration = 0; iteration < iterations; ++iteration)
-	{
-		// For each both fireflies
-		for(unsigned int i = 0; i < fireflies.size(); ++i)
-		{
-			firefly* fly_i = &fireflies.at(i);
-			bool hasMoved = false;
+          for(auto fly_j : fireflies)
+          {
+              // If fly_j shines brighter
+              if(fly_j.getIllumination() > fly_i->getIllumination())
+      {
+        // Move firefly if update necessary swarm data
+        moveFFAndUpdateSwarmData(fly_i, &fly_j);
+        hasMoved = true;
+      }
+          }
 
-			for(unsigned int j = 0; j < fireflies.size(); ++j)
-			{
-				firefly* fly_j = &fireflies.at(j);
+          // Move firefly in random direction if it didn't move
+    if(!hasMoved) moveFFAndUpdateSwarmData(fly_i, nullptr);
+      }
 
-				// If fly_j shines brighter
-				if(fly_j->getIllumination() > fly_i->getIllumination())
-        {
-          // Move firefly if update necessary swarm data
-          hasMoved = true;
-          moveFFAndUpdateSwarmData(fly_i, fly_j);
-        }
-			}
+      if(fmod(iteration, iterations / 10) == 0){
+          convergence.push_back(countFitnessSum() / fireflies.size());
+          cout << "Iteration " << iteration << ": " << convergence.back() << endl;
+      }
+  }
 
-			// Move firefly in random direction if it didn't move
-			if(!hasMoved) moveFFAndUpdateSwarmData(fly_i, NULL);
-		}
-		if(fmod(iteration, iterations / 10) == 0) cout << countFitnessSum() << endl;
-	}
-
-  cout << countStandardDerivative() << endl;
-  cout <<objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
-
-  /*
   cout << endl;
+  cout << "Standard deviation = " << countStandardDeviation() << endl << "Convergence exp: " << endl;
+  for(auto val : convergence)
+  	cout << val << endl;
 
-  cout << "Biggest error = " << highestKnownError << endl;
-  cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
-  cout << "Standard derivative = " << countStandardDerivative() << endl;
-   */
 }
 
 firefly* swarm::findBrightestFirefly()
@@ -143,21 +114,13 @@ void swarm::updateBestSolutionHolder(firefly* ff)
 void swarm::moveFFAndUpdateSwarmData(firefly* ff, firefly* target)
 {
   // Move firefly
-  if(target == NULL) ff->flyTowards(target);
+  if(target == nullptr) ff->flyTowards(target);
   else ff->flyTowards(target->getSolution());
 
   // Evaluate new position of ff
-  ff->setEvaluationValue(objectiveFunction->evaluate(ff->getSolution()));
-  ff->setIllumination(normalize(ff->getEvaluationValue()));
-
-  // Update biggest error if newPositionError is bigger
-  if(ff->getEvaluationValue() > highestKnownError)
-  {
-    highestKnownError = ff->getEvaluationValue();
-
-    // Normalize swarm according to new error
-    normalizeSwarm();
-  }
+  double evaluation = objectiveFunction->evaluate(ff->getSolution());
+  ff->setEvaluationValue(evaluation);
+  ff->setIllumination(evaluation);
 
   // Compare moved firefly with current best
   if(ff->getIllumination() > bestFirefly->getIllumination())
@@ -178,12 +141,8 @@ double swarm::countFitnessSum()
 {
   double sum = 0.0;
 
-  // For each firefly
-  for(unsigned int f = 0; f < fireflies.size(); ++f)
-  {
-    // Add it's fitness to sum
-    sum += fireflies.at(f).getIllumination();
-  }
+  // For each firefly add it's fitness to sum
+  for(auto f : fireflies)  sum += f.getIllumination();
 
   return sum;
 }
@@ -193,19 +152,15 @@ double swarm::countVariation()
   double variation = 0.0;
   double average = countFitnessSum() / fireflies.size();;
 
-  // For each firefly
-  for(unsigned int f = 0; f < fireflies.size(); ++f)
-  {
-    // Add element basing on it's fitness to variation
-    variation += pow(fireflies.at(f).getIllumination() - average ,2);
-  }
+  // For each firefly add element basing on it's fitness to variation
+  for(auto fly : fireflies) variation += pow(fly.getIllumination() - average ,2);
 
   variation /= fireflies.size();
 
   return variation;
 }
 
-double swarm::countStandardDerivative()
+double swarm::countStandardDeviation()
 {
   return sqrt(countVariation());
 }

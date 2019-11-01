@@ -7,6 +7,10 @@ population::population(unsigned int size, unsigned int iterations,
                        neuralNet* nn, i_distribution* distribution) :
 iterations(iterations), distribution(distribution)
 {
+  std::random_device rd;
+  _gen = std::mt19937(rd());
+  _uniformIntDistribution = std::uniform_int_distribution<>(0, 100);
+
 	// Add proper objective function
 	objectiveFunction = new alternativeNeuralWessingersEvaluator(nn);
 
@@ -15,84 +19,70 @@ iterations(iterations), distribution(distribution)
 
   // Initialize best solution holder
   bestSolutionHolder = factory->createIndividual();
+  bestSolutionHolder.setFitnessValue(objectiveFunction->evaluate(bestSolutionHolder.getSolution()));
 
 	// Initialize population
 
-	double individualsError;
-
 	// For each expected individual in the population
-	for(unsigned int i = 0; i < size; ++i)
-	{
-		// Add individual to the population
-		individuals.push_back(factory->createIndividual());
-		individual* currentIndividual = &individuals.at(i);
+	for(unsigned int i = 0; i < size; ++i) {
+    // Add individual to the population
+    individuals.push_back(factory->createIndividual());
+    individual * currentIndividual = &individuals.at(i);
 
-		/* Evaluate this individual. Note that currently it is it's error
-		 * not it's actual, normalized fitness value. */
-		individualsError = objectiveFunction->evaluate(currentIndividual->getSolution());
-		currentIndividual->setEvaluationValue(individualsError);
-
-		if(individualsError > highestKnownError)
-			highestKnownError = individualsError;
-	}
-
-	// Having highest known error begin normalization of the population.
-	normalizePopulation(&individuals);
+    /* Evaluate this individual. Note that currently it is it's error
+     * not it's actual, normalized fitness value. */
+    currentIndividual->setFitnessValue(objectiveFunction->evaluate(currentIndividual->getSolution()));
+  }
 
   // Add proper selector
   selector = new rouletteWheelSelector(&individuals, normalizedSimpleScaling);
-  //selector = new elitismSelector(elitismSelector::maximizing);
-  //selector->setNewPopulation(&individuals);
+  selector->setMaximalValue(1); // As it's now fixed and handled by objective function
 }
 
 /* It's the main method of the population, which holds all the computing.
  * when it's done best solution is found. */
 void population::findSolution()
 {
+
   // DEBUG
   findBestIndividual();
-  cout << "Start error = " << objectiveFunction->evaluate(bestIndividual->getSolution()) << endl;
-  cout << "Biggest error = " << highestKnownError << endl;
-  cout << "Standard derivative = " << countStandardDerivative() << endl;
+  cout << "Standard deviation = " << countStandardDeviation() << endl;
+  vector<double> convergence = {};
 
-  cout << countStandardDerivative() << endl;
 	// END DEBUG
 
 	// For each iteration
 	for(unsigned int iteration = 0; iteration < iterations; ++iteration )
 	{
-    findBestIndividual();
-    if( objectiveFunction->evaluate(bestIndividual->getSolution()) <
-        objectiveFunction->evaluate(bestSolutionHolder.getSolution()))
-      bestSolutionHolder.setSolution(bestIndividual->getSolution());
+      findBestIndividual();
 
-    createOffspringPopulation();
+      if( bestIndividual->getFitnessValue() > bestSolutionHolder.getFitnessValue() ){
+        bestSolutionHolder.setSolution(bestIndividual->getSolution());
+        bestSolutionHolder.setFitnessValue(bestIndividual->getFitnessValue());
+      }
 
-    mutateOldPopulation();
+      createOffspringPopulation();
 
-    // Select next population from individuals of both populations
-    selectNewPopulation();
+      mutateOldPopulation();
 
-    // Show that application is working by printing "." after 100 iterations.
-    if(fmod(iteration, iterations/10) == 0)	cout << countFitnessSum() << endl;
+      // Select next population from individuals of both populations
+      selectNewPopulation();
+
+      // Show that application is working by printing "." after 100 iterations.
+      if(fmod(iteration, iterations / 10) == 0) {
+        convergence.push_back(countFitnessSum() / individuals.size());
+        cout << "Iteration " << iteration << ": " << convergence.back() << endl;
+      }
 	}
 
   // Find best individual in final population
   findBestIndividual();
 
-  cout << countStandardDerivative() << endl;
   cout << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
 
-  /*
-  cout << endl;
-
-  // DEBUG
-  cout << "End error = " << objectiveFunction->evaluate(bestSolutionHolder.getSolution()) << endl;
-  cout << "Biggest error = " << highestKnownError << endl;
-  cout << "Standard derivative = " << countStandardDerivative() << endl;
-
-   */
-  // END DEBUG
+  cout << "Standard deviation = " << countStandardDeviation() << endl << "Convergence: " << endl;
+  for(auto val : convergence)
+    cout << val << endl;
 }
 
 void population::createOffspringPopulation()
@@ -108,7 +98,6 @@ void population::createOffspringPopulation()
 
   while(offsprings.size() < individuals.size())
   {
-
     selector->selectParents(&i, &j);
 
     individual* p1 = &individuals.at(i);
@@ -118,21 +107,8 @@ void population::createOffspringPopulation()
     offsprings.push_back(factory->createIndividual(p1, p2));
     individual* newIndividual = &offsprings.at(offsprings.size()-1);
 
-    // Evaluate individual
-    double individualsError = objectiveFunction->evaluate(newIndividual->getSolution());
-
-	  // Update error data if needed
-	  if(individualsError > highestKnownError)
-	  {
-		  highestKnownError = individualsError;
-
-		  // Normalize populations fitness according to new error
-		  normalizePopulation(&offsprings);
-		  normalizePopulation(&individuals);
-	  }
-
     // Evaluate new individual
-    newIndividual->setFitnessValue(normalize(individualsError));
+    newIndividual->setFitnessValue(objectiveFunction->evaluate(newIndividual->getSolution()));
   }
 }
 
@@ -141,31 +117,18 @@ void population::mutateOldPopulation()
 {
   unsigned int mutationRollValue;
   // For each individual in the population
-  for(unsigned int i = 0; i < individuals.size(); ++i)
+  for(auto individual : individuals)
   {
     // Roll for mutation
-    mutationRollValue = rand() % 100 + 1;
+    mutationRollValue = _uniformIntDistribution(_gen);
 
     // Mutate i-th individual if mutation occurred
     if(mutationRollValue <= mutationChancePercent)
     {
-      individuals.at(i).mutate();
-
-      // Evaluate individual
-      double individualsError = objectiveFunction->evaluate(individuals.at(i).getSolution());
-
-      // Update error data if needed
-      if(individualsError > highestKnownError)
-      {
-	      highestKnownError = individualsError;
-
-	      // Normalize populations fitness according to new error
-	      normalizePopulation(&offsprings);
-	      normalizePopulation(&individuals);
-      }
+      individual.mutate();
 
       // Update individuals fitness
-      individuals.at(i).setFitnessValue(normalize(individualsError));
+      individual.setFitnessValue(objectiveFunction->evaluate(individual.getSolution()));
     }
   }
 }
@@ -174,8 +137,6 @@ void population::mutateOldPopulation()
  * mutated population */
 void population::selectNewPopulation()
 {
-  selector->setMaximalValue(highestKnownError);
-
   // Remember population size
   unsigned int size = individuals.size();
 
@@ -197,8 +158,6 @@ void population::selectNewPopulation()
 
   // Fill next population until its size is equal to the original size
   unsigned int index = 0;
-
-  selector->setNewPopulation(&helperPopulation);
 
   selector->setNewPopulation(&helperPopulation);
 
@@ -229,23 +188,6 @@ void* population::getResult()
 	return bestSolutionHolder.getSolution();
 }
 
-// Normalize fitness values of whole population to [0,1], where 1 is the most
-// desirable fitness.
-void population::normalizePopulation(vector<individual>* population)
-{
-	for(int i = 0; i < population->size(); ++i)
-	{
-		individual* currentIndividual = &population->at(i);
-		currentIndividual->setFitnessValue(normalize(currentIndividual->getEvaluationValue()));
-	}
-}
-
-// Normalizing target value according to biggest known error.
-double population::normalize(double target)
-{
-	return 1 - (target / highestKnownError);
-}
-
 // Method used to find best individual in the population.
 // Best individual is the one with highest fitness value.
 void population::findBestIndividual()
@@ -257,7 +199,7 @@ void population::findBestIndividual()
 	for(unsigned int i = 1; i < individuals.size(); ++i)
 	{
 		bestIndividual = (individuals.at(i).getFitnessValue() > bestIndividual->getFitnessValue()) ?
-											&individuals.at(i) : bestIndividual;
+											& individuals.at(i) : bestIndividual;
 	}
 }
 
@@ -265,10 +207,7 @@ double population::countFitnessSum()
 {
   double sum = 0.0;
 
-  for(unsigned int i = 0; i < individuals.size(); ++i)
-  {
-    sum += individuals.at(i).getFitnessValue();
-  }
+  for(auto individual : individuals) sum += individual.getFitnessValue();
 
   return sum;
 }
@@ -278,17 +217,14 @@ double population::countVariation()
   double variation = 0.0;
   double average = countFitnessSum() / individuals.size();;
 
-  for(unsigned int i = 0; i < individuals.size(); ++i)
-  {
-    variation += pow(individuals.at(i).getFitnessValue() - average ,2);
-  }
+  for(auto individual : individuals) variation += pow(individual.getFitnessValue() - average ,2);
 
   variation /= individuals.size();
 
   return variation;
 }
 
-double population::countStandardDerivative()
+double population::countStandardDeviation()
 {
   return sqrt(countVariation());
 }

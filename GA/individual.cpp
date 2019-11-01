@@ -2,7 +2,7 @@
 
 #include "individual.h"
 
-individual::individual() {};
+individual::individual() = default;
 
 individual::individual(i_strategy* strategy) :
 strategy(strategy)
@@ -26,16 +26,6 @@ void individual::setFitnessValue(double newValue)
 double individual::getFitnessValue()
 {
   return fitnessValue;
-}
-
-void individual::setEvaluationValue(double value)
-{
-  evaluationValue = value;
-}
-
-double individual::getEvaluationValue()
-{
-  return evaluationValue;
 }
 
 void* individual::getSolution()
